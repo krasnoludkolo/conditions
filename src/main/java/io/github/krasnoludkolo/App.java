@@ -24,15 +24,15 @@ final class App {
         Random random = new Random();
         FantasticService service = new FantasticService(random);
 
-        AdminChecker checker = new AdminChecker(userInspector);
+        AdminChecker adminChecker = new AdminChecker(userInspector);
         AlwaysTrueChecker trueChecker = new AlwaysTrueChecker();
 
         User userFromRequest = new User(1);
 
         Resolver
                 .when(
-                        checker.check(userFromRequest),
-                        trueChecker.check()
+                        adminChecker.isUserAdmin(userFromRequest),
+                        trueChecker.checkIfYouReturnTrueResultWillBeTrue()
                 )
                 .perform(
                         getRandomNumber(service)
@@ -54,13 +54,14 @@ final class App {
             this.userInspector = userInspector;
         }
 
-        Condition check(User user) {
+        Condition isUserAdmin(User user) {
             return () -> userInspector.isAdmin(user);
         }
     }
+
     class AlwaysTrueChecker {
 
-        Condition check() {
+        Condition checkIfYouReturnTrueResultWillBeTrue() {
             return () -> Either.right(new Success());
         }
     }
