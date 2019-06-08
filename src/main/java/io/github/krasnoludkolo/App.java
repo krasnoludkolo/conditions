@@ -2,12 +2,13 @@ package io.github.krasnoludkolo;
 
 import io.github.krasnoludkolo.resolver.Action;
 import io.github.krasnoludkolo.resolver.Condition;
-import io.github.krasnoludkolo.resolver.Resolver;
 import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.control.Either;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
+
+import static io.github.krasnoludkolo.resolver.Resolver.when;
 
 final class App {
 
@@ -29,14 +30,12 @@ final class App {
 
         User userFromRequest = new User(1);
 
-        Resolver
-                .when(
-                        adminChecker.isUserAdmin(userFromRequest),
-                        trueChecker.checkIfYouReturnTrueResultWillBeTrue()
-                )
-                .perform(
-                        getRandomNumber(service)
-                );
+        when(
+                adminChecker.isUserAdmin(userFromRequest),
+                trueChecker.checkIfYouReturnTrueResultWillBeTrue()
+        ).perform(
+                getRandomNumber(service)
+        );
 
     }
 
