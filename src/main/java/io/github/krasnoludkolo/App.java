@@ -3,6 +3,8 @@ package io.github.krasnoludkolo;
 import io.github.krasnoludkolo.resolver.Action;
 import io.github.krasnoludkolo.resolver.Condition;
 import io.github.krasnoludkolo.resolver.Success;
+import io.github.krasnoludkolo.user.User;
+import io.github.krasnoludkolo.user.UserInspector;
 import io.vavr.control.Either;
 import org.jetbrains.annotations.NotNull;
 
