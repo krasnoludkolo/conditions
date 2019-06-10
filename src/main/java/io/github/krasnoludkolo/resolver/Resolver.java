@@ -2,6 +2,7 @@ package io.github.krasnoludkolo.resolver;
 
 import io.vavr.collection.Array;
 import io.vavr.collection.List;
+import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 
 public final class Resolver {
@@ -11,7 +12,7 @@ public final class Resolver {
 
     private static <T> Either<List<SomeError>, T> perform(Action<T> action, Condition... conditions) {
         return checkConditions(conditions)
-                .flatMap((Success s) -> action.perform());
+                .map((Success s) -> action.perform());
     }
 
     private static Either<List<SomeError>, Success> checkConditions(Condition[] conditions) {
@@ -19,12 +20,16 @@ public final class Resolver {
                 Array.of(conditions)
                         .toList()
                         .map(Condition::test)
-        ).mapLeft(errors->errors.flatMap(i->i).toList())
+        ).mapLeft(Resolver::flattenErrorsToList)
                 .map(Success::new);
     }
 
+    private static List<SomeError> flattenErrorsToList(Seq<List<SomeError>> errors) {
+        return errors.flatMap(i->i).toList();
+    }
+
     public static ResolverBuilder when(Condition... conditions) {
-        return new ResolverBuilder(conditions, ()->Either.left(List.of(new SomeError())));
+        return new ResolverBuilder(conditions, ()->Either.left(List.of(new SomeError.Empty())));
     }
 
 
