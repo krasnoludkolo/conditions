@@ -29,8 +29,7 @@ final class PointsService {
     }
 
     private Success updatePoint(Point point) {
-        repository.update(point.userId,point);
-        return new Success();
+        return repository.update(point.userId,point);
     }
 
 

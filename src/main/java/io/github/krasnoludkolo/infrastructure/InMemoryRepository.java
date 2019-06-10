@@ -1,8 +1,9 @@
 package io.github.krasnoludkolo.infrastructure;
+
+import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryRepository<T> {
@@ -21,12 +22,14 @@ public class InMemoryRepository<T> {
         return List.ofAll(map.values());
     }
 
-    public void delete(int id) {
+    public Success delete(int id) {
         map.remove(id);
+        return new Success();
     }
 
-    public void update(Integer id, T t) {
+    public Success update(Integer id, T t) {
         map.put(id, t);
+        return new Success();
     }
 
 }

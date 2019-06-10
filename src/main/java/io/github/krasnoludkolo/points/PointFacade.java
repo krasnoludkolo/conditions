@@ -21,9 +21,12 @@ public class PointFacade {
 
     public Either<List<SomeError>,Success> addPointToUser(int userId){
         return Resolver
-                .when(userCheckers.userExists(userId))
-                .perform(pointsService.addPointToUser(userId));
-
+                .when(
+                        userCheckers.userExists(userId)
+                )
+                .perform(
+                        pointsService.addPointToUser(userId)
+                );
     }
 
 
