@@ -10,7 +10,7 @@ public final class Resolver {
     private Resolver() {
     }
 
-    private static <T> Either<List<SomeError>, T> perform(Action<T> action, Condition... conditions) {
+    public static <T> Either<List<SomeError>, T> perform(Action<T> action, Condition... conditions) {
         return checkConditions(conditions)
                 .map((Success s) -> action.perform());
     }
