@@ -12,9 +12,10 @@ public class UserFacade {
     private UserService userService;
     private UserCheckers userCheckers;
 
-    public UserFacade(UserCheckers userCheckers) {
-        this.userCheckers = userCheckers;
-        this.userService = new UserService(new InMemoryRepository<>());
+    public UserFacade() {
+        InMemoryRepository<User> repository = new InMemoryRepository<>();
+        this.userCheckers = new UserCheckers(repository);
+        this.userService = new UserService(repository);
     }
 
 
@@ -30,5 +31,7 @@ public class UserFacade {
                 );
     }
 
-
+    public UserCheckers getUserCheckers() {
+        return userCheckers;
+    }
 }
