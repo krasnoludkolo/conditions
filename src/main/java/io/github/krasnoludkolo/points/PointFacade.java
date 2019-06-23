@@ -13,9 +13,9 @@ public class PointFacade {
     private UserCheckers userCheckers;
     private PointsService pointsService;
 
-    public PointFacade(UserCheckers userCheckers) {
+    PointFacade(UserCheckers userCheckers, InMemoryRepository<Point> repository) {
         this.userCheckers = userCheckers;
-        this.pointsService = new PointsService(new InMemoryRepository<>());
+        this.pointsService = new PointsService(repository);
     }
 
 
@@ -26,6 +26,16 @@ public class PointFacade {
                 )
                 .perform(
                         pointsService.addPointToUser(userId)
+                );
+    }
+
+    public Either<List<SomeError>,Integer> getUserPoints(int userId){
+        return Resolver
+                .when(
+                        userCheckers.userExists(userId)
+                )
+                .perform(
+                        pointsService.getUserPoints(userId)
                 );
     }
 

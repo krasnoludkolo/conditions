@@ -23,4 +23,8 @@ final class Point {
         int newPoints = points - 1;
         return new Point(newPoints,userId);
     }
+
+    int getCount(){
+        return points;
+    }
 }

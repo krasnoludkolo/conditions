@@ -12,13 +12,13 @@ public class UserFacade {
     private UserService userService;
     private UserCheckers userCheckers;
 
-    public UserFacade(UserCheckers userCheckers) {
+    public UserFacade(UserCheckers userCheckers, InMemoryRepository<User> repository) {
         this.userCheckers = userCheckers;
-        this.userService = new UserService(new InMemoryRepository<>());
+        this.userService = new UserService(repository);
     }
 
 
-    Either<List<SomeError>, Success> promoteToAdmin(int promoterId, int userId) {
+    public Either<List<SomeError>, Success> promoteToAdmin(int promoterId, int userId) {
         return Resolver
                 .when(
                         userCheckers.userExists(promoterId),
