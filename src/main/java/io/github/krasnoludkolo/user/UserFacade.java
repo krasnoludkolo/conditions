@@ -13,9 +13,8 @@ public class UserFacade {
     private UserService userService;
     private UserCheckers userCheckers;
 
-    public UserFacade() {
-        InMemoryRepository<User> repository = new InMemoryRepository<>();
-        this.userCheckers = new UserCheckers(repository);
+    public UserFacade(UserCheckers userCheckers, InMemoryRepository<User> repository) {
+        this.userCheckers = userCheckers;
         this.userService = new UserService(repository);
     }
 
@@ -27,7 +26,7 @@ public class UserFacade {
     }
 
 
-    Either<List<SomeError>, Success> promoteToAdmin(int promoterId, int userId) {
+    public Either<List<SomeError>, Success> promoteToAdmin(int promoterId, int userId) {
         return Resolver
                 .when(
                         userCheckers.userExists(promoterId),
@@ -39,7 +38,5 @@ public class UserFacade {
                 );
     }
 
-    public UserCheckers getUserCheckers() {
-        return userCheckers;
-    }
+
 }

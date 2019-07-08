@@ -36,4 +36,16 @@ final class PointsService {
                 .get();
     }
 
+    Action<Integer> getUserPoints(int userId) {
+        return ()->repository
+                .findOne(userId)
+                .map(Point::getCount)
+                .get();
+    }
+
+    private Success updatePoint(Point point) {
+        return repository.update(point.userId,point);
+    }
+
+
 }

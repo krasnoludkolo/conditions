@@ -34,4 +34,8 @@ final class Point implements Identifiable<Integer> {
     public Integer getId() {
         return points;
     }
+
+    int getCount(){
+        return points;
+    }
 }
