@@ -6,12 +6,13 @@ import io.vavr.control.Option;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryRepository<T> {
+public class InMemoryRepository<T extends Identifiable<Integer>> {
 
     private ConcurrentHashMap<Integer, T> map = new ConcurrentHashMap<>();
 
-    public void save(Integer uuid, T t) {
-        map.put(uuid, t);
+    public T save(T t) {
+        map.put(t.getId(), t);
+        return t;
     }
 
     public Option<T> findOne(int id) {
@@ -27,8 +28,8 @@ public class InMemoryRepository<T> {
         return new Success();
     }
 
-    public Success update(Integer id, T t) {
-        map.put(id, t);
+    public Success update(T t) {
+        map.put(t.getId(), t);
         return new Success();
     }
 

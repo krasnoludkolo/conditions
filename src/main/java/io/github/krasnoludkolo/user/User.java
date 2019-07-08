@@ -1,21 +1,24 @@
 package io.github.krasnoludkolo.user;
 
-final class User {
+import io.github.krasnoludkolo.infrastructure.Identifiable;
+import io.github.krasnoludkolo.user.api.UserDTO;
 
-    final int id;
+import java.util.concurrent.atomic.AtomicInteger;
+
+final class User implements Identifiable<Integer> {
+
+    private final int id;
     final boolean isAdmin;
 
-    static int currentId = 0; //for simplicity
+    private static AtomicInteger currentId = new AtomicInteger(0); //for simplicity
 
     static User createNormal(){
-        int id = currentId;
-        currentId++;
+        int id = currentId.getAndIncrement();
         return new User(id,false);
     }
 
     static User createAdmin(){
-        int id = currentId;
-        currentId++;
+        int id = currentId.getAndIncrement();
         return new User(id,true);
     }
 
@@ -26,5 +29,14 @@ final class User {
 
     User promoteToAdmin(){
         return new User(id,true);
+    }
+
+    UserDTO toDTO(){
+        return new UserDTO(id,isAdmin);
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
     }
 }

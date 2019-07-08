@@ -10,7 +10,11 @@ public final class Resolver {
     private Resolver() {
     }
 
-    public static <T> Either<List<SomeError>, T> perform(Action<T> action, Condition... conditions) {
+    public static <T> T perform(Action<T> action) {
+        return  action.perform();
+    }
+
+    private static <T> Either<List<SomeError>, T> perform(Action<T> action, Condition... conditions) {
         return checkConditions(conditions)
                 .map((Success s) -> action.perform());
     }
@@ -31,7 +35,6 @@ public final class Resolver {
     public static ResolverBuilder when(Condition... conditions) {
         return new ResolverBuilder(conditions, ()->Either.left(List.of(new SomeError.Empty())));
     }
-
 
     public static class ResolverBuilder {
         Condition[] conditions;

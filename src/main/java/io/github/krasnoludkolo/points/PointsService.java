@@ -16,7 +16,7 @@ final class PointsService {
         return ()->repository
                 .findOne(userId)
                 .map(Point::increase)
-                .map(this::updatePoint)
+                .map(repository::update)
                 .get();
     }
 
@@ -24,13 +24,16 @@ final class PointsService {
         return ()->repository
                 .findOne(userId)
                 .map(Point::decrease)
-                .map(this::updatePoint)
+                .map(repository::update)
                 .get();
     }
 
-    private Success updatePoint(Point point) {
-        return repository.update(point.userId,point);
+    Action<Success> setUserPoints(int userId, int points) {
+        return () -> repository
+                .findOne(points)
+                .map(point -> point.setCount(points))
+                .map(repository::update)
+                .get();
     }
-
 
 }

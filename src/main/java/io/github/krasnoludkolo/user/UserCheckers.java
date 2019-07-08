@@ -11,7 +11,7 @@ public class UserCheckers {
 
     private InMemoryRepository<User> repository;
 
-    public UserCheckers(InMemoryRepository<User> repository) {
+    UserCheckers(InMemoryRepository<User> repository) {
         this.repository = repository;
     }
 

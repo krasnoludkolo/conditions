@@ -1,9 +1,11 @@
 package io.github.krasnoludkolo.points;
 
-final class Point {
+import io.github.krasnoludkolo.infrastructure.Identifiable;
 
-    final int points;
-    final int userId;
+final class Point implements Identifiable<Integer> {
+
+    private final int points;
+    private final int userId;
 
     static Point create(int userId){
         return new Point(0,userId);
@@ -22,5 +24,14 @@ final class Point {
     Point decrease(){
         int newPoints = points - 1;
         return new Point(newPoints,userId);
+    }
+
+    Point setCount(int point){
+        return new Point(point,userId);
+    }
+
+    @Override
+    public Integer getId() {
+        return points;
     }
 }

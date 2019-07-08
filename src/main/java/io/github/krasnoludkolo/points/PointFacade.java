@@ -18,7 +18,6 @@ public class PointFacade {
         this.pointsService = new PointsService(new InMemoryRepository<>());
     }
 
-
     public Either<List<SomeError>,Success> addPointToUser(int userId){
         return Resolver
                 .when(
@@ -26,6 +25,17 @@ public class PointFacade {
                 )
                 .perform(
                         pointsService.addPointToUser(userId)
+                );
+    }
+
+    public Either<List<SomeError>,Success> setUserResult(int userId, int points, int adminId){
+        return Resolver
+                .when(
+                        userCheckers.userExists(userId),
+                        userCheckers.isUserAdmin(adminId)
+                )
+                .perform(
+                        pointsService.setUserPoints(userId,points)
                 );
     }
 

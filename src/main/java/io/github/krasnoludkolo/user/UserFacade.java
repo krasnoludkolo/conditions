@@ -4,6 +4,7 @@ import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.resolver.Resolver;
 import io.github.krasnoludkolo.resolver.SomeError;
 import io.github.krasnoludkolo.resolver.Success;
+import io.github.krasnoludkolo.user.api.UserDTO;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
 
@@ -16,6 +17,13 @@ public class UserFacade {
         InMemoryRepository<User> repository = new InMemoryRepository<>();
         this.userCheckers = new UserCheckers(repository);
         this.userService = new UserService(repository);
+    }
+
+    UserDTO cerateUser(){
+        return Resolver
+                .perform(
+                        userService.createUser()
+                );
     }
 
 

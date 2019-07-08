@@ -3,6 +3,7 @@ package io.github.krasnoludkolo.user;
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.resolver.Action;
 import io.github.krasnoludkolo.resolver.Success;
+import io.github.krasnoludkolo.user.api.UserDTO;
 
 final class UserService {
 
@@ -16,11 +17,14 @@ final class UserService {
         return () -> repository
                 .findOne(userId)
                 .map(User::promoteToAdmin)
-                .map(this::updateUser)
+                .map(repository::update)
                 .get();
     }
 
-    private Success updateUser(User user) {
-        return repository.update(user.id, user);
+    Action<UserDTO> createUser() {
+        return () -> repository
+                .save(User.createNormal())
+                .toDTO();
     }
+
 }
