@@ -4,7 +4,7 @@ import io.github.krasnoludkolo.infrastructure.Identifiable;
 
 final class Point implements Identifiable<Integer> {
 
-    private final int points;
+    final int points;
     private final int userId;
 
     static Point create(int userId){
@@ -35,7 +35,4 @@ final class Point implements Identifiable<Integer> {
         return points;
     }
 
-    int getCount(){
-        return points;
-    }
 }

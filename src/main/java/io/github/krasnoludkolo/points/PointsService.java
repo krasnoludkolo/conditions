@@ -39,12 +39,12 @@ final class PointsService {
     Action<Integer> getUserPoints(int userId) {
         return ()->repository
                 .findOne(userId)
-                .map(Point::getCount)
+                .map(p->p.points)
                 .get();
     }
 
     private Success updatePoint(Point point) {
-        return repository.update(point.userId,point);
+        return repository.update(point);
     }
 
 
