@@ -3,11 +3,9 @@ package io.github.krasnoludkolo;
 import io.github.krasnoludkolo.infrastructure.http.ResponseResolver;
 import io.github.krasnoludkolo.user.UserConfiguration;
 import io.github.krasnoludkolo.user.UserFacade;
-import io.github.krasnoludkolo.user.api.UserActionError;
-import io.github.krasnoludkolo.user.api.UserDTO;
 import io.javalin.Handler;
 import io.javalin.Javalin;
-import io.vavr.control.Either;
+import io.vavr.control.Try;
 
 final class App {
 
@@ -23,11 +21,11 @@ final class App {
             ctx.redirect("/user/" + id);
         };
 
-        Handler getUser = ctx -> {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            Either<UserActionError, UserDTO> userInfo = userFacade.getUserInfo(id);
-            ResponseResolver.resolve(userInfo, ctx);
-        };
+        Handler getUser = ctx -> Try
+                .of(()->Integer.parseInt(ctx.pathParam("id")))
+                .map(userFacade::getUserInfo)
+                .map(userInfo->ResponseResolver.resolve(userInfo, ctx))
+                .get();//TODO handle exception
 
         app
                 .post("/user", createUser)

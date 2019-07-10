@@ -19,7 +19,7 @@ public class PointFacade {
         this.pointsService = new PointsService(repository);
     }
 
-    public Either<UserActionError,Success> addPointToUser(int userId){
+    public Either<? extends ActionError,Success> addPointToUser(int userId){
         return Resolver
                 .when(
                         userCheckers.userExists(userId)
@@ -29,7 +29,7 @@ public class PointFacade {
                 );
     }
 
-    public Either<UserActionError,Success> setUserResult(int userId, int points, int adminId){
+    public Either<? extends ActionError,Success> setUserResult(int userId, int points, int adminId){
         return Resolver
                 .when(
                         userCheckers.userExists(userId),
@@ -40,7 +40,7 @@ public class PointFacade {
                 );
     }
 
-    public Either<UserActionError,Integer> getUserPoints(int userId){
+    public Either<? extends ActionError,Integer> getUserPoints(int userId){
         return Resolver
                 .when(
                         userCheckers.userExists(userId)

@@ -1,5 +1,6 @@
 package io.github.krasnoludkolo.user;
 
+import io.github.krasnoludkolo.infrastructure.ActionError;
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.resolver.Resolver;
 import io.github.krasnoludkolo.resolver.Success;
@@ -25,7 +26,7 @@ public class UserFacade {
                 );
     }
 
-    public Either<UserActionError, UserDTO> getUserInfo(int id){
+    public Either<? extends ActionError, UserDTO> getUserInfo(int id){
         return Resolver
                 .when(
                         userCheckers.userExists(id)
@@ -35,7 +36,7 @@ public class UserFacade {
                 );
     }
 
-    public Either<UserActionError, Success> promoteToAdmin(int promoterId, int userId) {
+    public Either<? extends ActionError, Success> promoteToAdmin(int promoterId, int userId) {
         return Resolver
                 .when(
                         userCheckers.userExists(promoterId),
