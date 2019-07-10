@@ -12,7 +12,6 @@ import io.vavr.control.Either;
 final class App {
 
     public static void main(String[] args) {
-        //TODO run javalin server
 
         UserConfiguration userConfiguration = UserConfiguration.inMemory();
         UserFacade userFacade = userConfiguration.getUserFacade();
