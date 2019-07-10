@@ -27,4 +27,10 @@ final class UserService {
                 .toDTO();
     }
 
+    Action<UserDTO> getUserInfo(int id) {
+        return () -> repository
+                .findOne(id)
+                .map(User::toDTO)
+                .get();
+    }
 }

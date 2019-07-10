@@ -14,38 +14,37 @@ public final class Resolver {
         return  action.perform();
     }
 
-    private static <T> Either<List<SomeError>, T> perform(Action<T> action, Condition... conditions) {
+    private static <T, E> Either<List<E>, T> perform(Action<T> action, List<Condition<E>> conditions) {
         return checkConditions(conditions)
-                .map((Success s) -> action.perform());
+                .map(s -> action.perform());
     }
 
-    private static Either<List<SomeError>, Success> checkConditions(Condition[] conditions) {
+    private static <E> Either<List<E>, Success> checkConditions(List<Condition<E>> conditions) {
         return Either.sequence(
-                Array.of(conditions)
+                Array.ofAll(conditions)
                         .toList()
                         .map(Condition::test)
-        ).mapLeft(Resolver::flattenErrorsToList)
+        ).mapLeft(Seq::toList)
                 .map(Success::new);
     }
 
-    private static List<SomeError> flattenErrorsToList(Seq<List<SomeError>> errors) {
-        return errors.flatMap(i->i).toList();
+    @SafeVarargs
+    public static <E> ResolverBuilder<E> when(Condition<E>... conditions) {
+        return when(List.of(conditions));
     }
 
-    public static ResolverBuilder when(Condition... conditions) {
-        return new ResolverBuilder(conditions, ()->Either.left(List.of(new SomeError.Empty())));
+    private static <E> ResolverBuilder<E> when(List<Condition<E>> conditions) {
+        return new ResolverBuilder<>(conditions);
     }
 
-    public static class ResolverBuilder {
-        Condition[] conditions;
-        Action action;
+    public static class ResolverBuilder<E> {
+        List<Condition<E>> conditions;
 
-        private ResolverBuilder(Condition[] conditions, Action action) {
+        private ResolverBuilder(List<Condition<E>> conditions) {
             this.conditions = conditions;
-            this.action = action;
         }
 
-        public <T> Either<List<SomeError>, T> perform(Action<T> action) {
+        public <T> Either<List<E>, T> perform(Action<T> action) {
             return Resolver.perform(action, conditions);
         }
 

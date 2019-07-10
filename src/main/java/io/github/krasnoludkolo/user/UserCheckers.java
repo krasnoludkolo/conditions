@@ -15,18 +15,18 @@ public class UserCheckers {
         this.repository = repository;
     }
 
-    public Condition isUserAdmin(int userId) {
+    public Condition<UserError> isUserAdmin(int userId) {
         return () -> repository
                 .findOne(userId)
                 .filter(user -> user.isAdmin)
-                .toEither(List.of((SomeError) UserError.USER_IS_NOT_ADMIN))
+                .toEither(UserError.USER_IS_NOT_ADMIN)
                 .map(Success::new);
     }
 
-    public Condition userExists(int userId) {
+    public Condition<UserError> userExists(int userId) {
         return () -> repository
                 .findOne(userId)
-                .toEither(List.of((SomeError) UserError.USER_NOT_FOUND))
+                .toEither(UserError.USER_NOT_FOUND)
                 .map(Success::new);
     }
 

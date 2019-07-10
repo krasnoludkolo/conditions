@@ -1,10 +1,9 @@
 package io.github.krasnoludkolo.resolver;
 
-import io.vavr.collection.List;
 import io.vavr.control.Either;
 
-public interface Condition {
+public interface Condition<E> {
 
-    Either<List<SomeError>,Success> test();
+    Either<E, Success> test();
 
 }
