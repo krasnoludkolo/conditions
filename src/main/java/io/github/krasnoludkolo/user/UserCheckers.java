@@ -2,10 +2,8 @@ package io.github.krasnoludkolo.user;
 
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.resolver.Condition;
-import io.github.krasnoludkolo.resolver.SomeError;
 import io.github.krasnoludkolo.resolver.Success;
-import io.github.krasnoludkolo.user.api.UserError;
-import io.vavr.collection.List;
+import io.github.krasnoludkolo.user.api.UserActionError;
 
 public class UserCheckers {
 
@@ -15,18 +13,18 @@ public class UserCheckers {
         this.repository = repository;
     }
 
-    public Condition<UserError> isUserAdmin(int userId) {
+    public Condition<UserActionError> isUserAdmin(int userId) {
         return () -> repository
                 .findOne(userId)
                 .filter(user -> user.isAdmin)
-                .toEither(UserError.USER_IS_NOT_ADMIN)
+                .toEither(UserActionError.USER_IS_NOT_ADMIN)
                 .map(Success::new);
     }
 
-    public Condition<UserError> userExists(int userId) {
+    public Condition<UserActionError> userExists(int userId) {
         return () -> repository
                 .findOne(userId)
-                .toEither(UserError.USER_NOT_FOUND)
+                .toEither(UserActionError.USER_NOT_FOUND)
                 .map(Success::new);
     }
 

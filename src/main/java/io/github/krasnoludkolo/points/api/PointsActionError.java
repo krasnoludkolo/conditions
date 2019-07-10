@@ -1,14 +1,14 @@
 package io.github.krasnoludkolo.points.api;
 
-import io.github.krasnoludkolo.infrastructure.ErrorResponse;
+import io.github.krasnoludkolo.infrastructure.ActionError;
 
-public enum PointsError implements ErrorResponse {
+public enum PointsActionError implements ActionError {
     USER_NOT_FOUND("user not found", 404);
 
     private String message;
     private int code;
 
-    PointsError(String message, int code) {
+    PointsActionError(String message, int code) {
         this.message = message;
         this.code = code;
     }

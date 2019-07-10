@@ -1,12 +1,11 @@
 package io.github.krasnoludkolo.points;
 
-import io.github.krasnoludkolo.infrastructure.ErrorResponse;
+import io.github.krasnoludkolo.infrastructure.ActionError;
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.resolver.Resolver;
-import io.github.krasnoludkolo.resolver.SomeError;
 import io.github.krasnoludkolo.resolver.Success;
 import io.github.krasnoludkolo.user.UserCheckers;
-import io.github.krasnoludkolo.user.api.UserError;
+import io.github.krasnoludkolo.user.api.UserActionError;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
 
@@ -20,7 +19,7 @@ public class PointFacade {
         this.pointsService = new PointsService(repository);
     }
 
-    public Either<List<UserError>,Success> addPointToUser(int userId){
+    public Either<UserActionError,Success> addPointToUser(int userId){
         return Resolver
                 .when(
                         userCheckers.userExists(userId)
@@ -30,7 +29,7 @@ public class PointFacade {
                 );
     }
 
-    public Either<List<UserError>,Success> setUserResult(int userId, int points, int adminId){
+    public Either<UserActionError,Success> setUserResult(int userId, int points, int adminId){
         return Resolver
                 .when(
                         userCheckers.userExists(userId),
@@ -41,7 +40,7 @@ public class PointFacade {
                 );
     }
 
-    public Either<List<UserError>,Integer> getUserPoints(int userId){
+    public Either<UserActionError,Integer> getUserPoints(int userId){
         return Resolver
                 .when(
                         userCheckers.userExists(userId)

@@ -3,6 +3,7 @@ package io.github.krasnoludkolo.resolver;
 import io.vavr.collection.Array;
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
+import io.vavr.collection.Traversable;
 import io.vavr.control.Either;
 
 public final class Resolver {
@@ -12,20 +13,6 @@ public final class Resolver {
 
     public static <T> T perform(Action<T> action) {
         return  action.perform();
-    }
-
-    private static <T, E> Either<List<E>, T> perform(Action<T> action, List<Condition<E>> conditions) {
-        return checkConditions(conditions)
-                .map(s -> action.perform());
-    }
-
-    private static <E> Either<List<E>, Success> checkConditions(List<Condition<E>> conditions) {
-        return Either.sequence(
-                Array.ofAll(conditions)
-                        .toList()
-                        .map(Condition::test)
-        ).mapLeft(Seq::toList)
-                .map(Success::new);
     }
 
     @SafeVarargs
@@ -38,16 +25,28 @@ public final class Resolver {
     }
 
     public static class ResolverBuilder<E> {
-        List<Condition<E>> conditions;
 
+        List<Condition<E>> conditions;
         private ResolverBuilder(List<Condition<E>> conditions) {
             this.conditions = conditions;
         }
 
-        public <T> Either<List<E>, T> perform(Action<T> action) {
-            return Resolver.perform(action, conditions);
+        public <T> Either<E, T> perform(Action<T> action) {
+            return perform(action, conditions);
+        }
+
+        private <T> Either<E, T> perform(Action<T> action, List<Condition<E>> conditions) {
+            return checkConditions(conditions)
+                    .map(s -> action.perform());
+        }
+
+        private Either<E, Success> checkConditions(List<Condition<E>> conditions) {
+            return Either.sequence(
+                    conditions
+                            .map(Condition::test)
+            ).mapLeft(Traversable::head)
+                    .map(Success::new);
         }
 
     }
-
 }
