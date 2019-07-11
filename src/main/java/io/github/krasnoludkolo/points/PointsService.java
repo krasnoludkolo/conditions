@@ -1,14 +1,16 @@
 package io.github.krasnoludkolo.points;
 
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
+import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.resolver.Action;
 import io.github.krasnoludkolo.resolver.Success;
+import io.vavr.control.Option;
 
 final class PointsService {
 
-    private InMemoryRepository<Point> repository;
+    private Repository<Point> repository;
 
-    PointsService(InMemoryRepository<Point> repository) {
+    PointsService(Repository<Point> repository) {
         this.repository = repository;
     }
 
@@ -30,7 +32,7 @@ final class PointsService {
 
     Action<Success> setUserPoints(int userId, int points) {
         return () -> repository
-                .findOne(points)
+                .findOne(userId)
                 .map(point -> point.setCount(points))
                 .map(repository::update)
                 .get();
@@ -43,9 +45,11 @@ final class PointsService {
                 .get();
     }
 
-    private Success updatePoint(Point point) {
-        return repository.update(point);
+    Action<Integer> createResultForUser(int id) {
+        return ()-> Option.of(Point.create(id))
+                .map(repository::save)
+                .map(Point::getId)
+                .get();
+
     }
-
-
 }

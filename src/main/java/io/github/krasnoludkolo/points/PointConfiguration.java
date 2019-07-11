@@ -1,22 +1,28 @@
 package io.github.krasnoludkolo.points;
 
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
-import io.github.krasnoludkolo.user.UserCheckers;
+import io.github.krasnoludkolo.infrastructure.Repository;
 
 public final class PointConfiguration {
 
-    private PointFacade pointFacade;
+    private final PointCheckers pointCheckers;
+    private final PointFacade pointFacade;
 
-    public static PointConfiguration inMemory(UserCheckers userCheckers){
-        return new PointConfiguration(userCheckers);
+    public static PointConfiguration inMemory(){
+        Repository<Point> repository = new InMemoryRepository<>();
+        return new PointConfiguration(repository);
     }
 
-    private PointConfiguration(UserCheckers userCheckers) {
-        InMemoryRepository<Point> repository = new InMemoryRepository<>();
-        this.pointFacade = new PointFacade(userCheckers,repository);
+    private PointConfiguration(Repository<Point> repository) {
+        this.pointCheckers = new PointCheckers(repository);
+        this.pointFacade = new PointFacade(repository, pointCheckers);
     }
 
     public PointFacade getPointFacade() {
         return pointFacade;
+    }
+
+    public PointCheckers getPointCheckers() {
+        return pointCheckers;
     }
 }

@@ -1,6 +1,8 @@
 package io.github.krasnoludkolo;
 
+import io.github.krasnoludkolo.game.GameConfiguration;
 import io.github.krasnoludkolo.infrastructure.http.ResponseResolver;
+import io.github.krasnoludkolo.points.PointConfiguration;
 import io.github.krasnoludkolo.user.UserConfiguration;
 import io.github.krasnoludkolo.user.UserFacade;
 import io.javalin.Handler;
@@ -10,8 +12,12 @@ final class App {
 
     void start() {
 
-        UserConfiguration userConfiguration = UserConfiguration.inMemory();
+        PointConfiguration pointConfiguration = PointConfiguration.inMemory();
+
+        UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.getPointFacade());
         UserFacade userFacade = userConfiguration.getUserFacade();
+
+        GameConfiguration.inMemory(pointConfiguration.getPointFacade(),userConfiguration.getUserCheckers());
 
         Javalin app = Javalin.create().start(7000);
 

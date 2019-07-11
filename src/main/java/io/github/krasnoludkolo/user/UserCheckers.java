@@ -1,30 +1,31 @@
 package io.github.krasnoludkolo.user;
 
-import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
+import io.github.krasnoludkolo.infrastructure.ActionError;
+import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.resolver.Condition;
 import io.github.krasnoludkolo.resolver.Success;
 import io.github.krasnoludkolo.user.api.UserActionError;
 
 public class UserCheckers {
 
-    private InMemoryRepository<User> repository;
+    private Repository<User> repository;
 
-    UserCheckers(InMemoryRepository<User> repository) {
+    UserCheckers(Repository<User> repository) {
         this.repository = repository;
     }
 
-    public Condition<UserActionError> isUserAdmin(int userId) {
+    public Condition<ActionError> isUserAdmin(int userId) {
         return () -> repository
                 .findOne(userId)
                 .filter(user -> user.isAdmin)
-                .toEither(UserActionError.USER_IS_NOT_ADMIN)
+                .toEither((ActionError)UserActionError.USER_IS_NOT_ADMIN)
                 .map(Success::new);
     }
 
-    public Condition<UserActionError> userExists(int userId) {
+    public Condition<ActionError> userExists(int userId) {
         return () -> repository
                 .findOne(userId)
-                .toEither(UserActionError.USER_NOT_FOUND)
+                .toEither((ActionError)UserActionError.USER_NOT_FOUND)
                 .map(Success::new);
     }
 

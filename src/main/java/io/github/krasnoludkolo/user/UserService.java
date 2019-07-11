@@ -1,16 +1,19 @@
 package io.github.krasnoludkolo.user;
 
-import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
+import io.github.krasnoludkolo.infrastructure.Repository;
+import io.github.krasnoludkolo.points.PointFacade;
 import io.github.krasnoludkolo.resolver.Action;
 import io.github.krasnoludkolo.resolver.Success;
 import io.github.krasnoludkolo.user.api.UserDTO;
 
 final class UserService {
 
-    private InMemoryRepository<User> repository;
+    private Repository<User> repository;
+    private PointFacade pointFacade;
 
-    UserService(InMemoryRepository<User> repository) {
+    UserService(Repository<User> repository, PointFacade pointFacade) {
         this.repository = repository;
+        this.pointFacade = pointFacade;
     }
 
     Action<Success> promoteToAdmin(int userId) {
@@ -22,9 +25,13 @@ final class UserService {
     }
 
     Action<UserDTO> createUser() {
-        return () -> repository
-                .save(User.createNormal())
-                .toDTO();
+        return () -> {
+            User user = User.createNormal();
+            pointFacade.createResultForUser(user.getId());
+            return repository
+                    .save(user)
+                    .toDTO();
+        };
     }
 
     Action<UserDTO> getUserInfo(int id) {
