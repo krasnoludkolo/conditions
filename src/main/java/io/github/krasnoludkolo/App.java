@@ -1,15 +1,17 @@
 package io.github.krasnoludkolo;
 
+import io.github.krasnoludkolo.infrastructure.ActionError;
 import io.github.krasnoludkolo.infrastructure.http.ResponseResolver;
 import io.github.krasnoludkolo.user.UserConfiguration;
 import io.github.krasnoludkolo.user.UserFacade;
+import io.github.krasnoludkolo.user.api.UserDTO;
 import io.javalin.Handler;
 import io.javalin.Javalin;
-import io.vavr.control.Try;
+import io.vavr.control.Either;
 
 final class App {
 
-    public static void main(String[] args) {
+    void start() {
 
         UserConfiguration userConfiguration = UserConfiguration.inMemory();
         UserFacade userFacade = userConfiguration.getUserFacade();
@@ -21,11 +23,11 @@ final class App {
             ctx.redirect("/user/" + id);
         };
 
-        Handler getUser = ctx -> Try
-                .of(()->Integer.parseInt(ctx.pathParam("id")))
-                .map(userFacade::getUserInfo)
-                .map(userInfo->ResponseResolver.resolve(userInfo, ctx))
-                .get();//TODO handle exception
+        Handler getUser = ctx -> {
+            Integer id = ctx.queryParam("id", Integer.class).get();
+            Either<? extends ActionError, UserDTO> userInfo = userFacade.getUserInfo(id);
+            ResponseResolver.resolve(userInfo, ctx);
+        };
 
         app
                 .post("/user", createUser)
