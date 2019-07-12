@@ -1,45 +1,47 @@
 package io.github.krasnoludkolo.game;
 
-import io.github.krasnoludkolo.game.api.Bet;
+import io.github.krasnoludkolo.game.api.BetDTO;
 import io.github.krasnoludkolo.game.api.GameDTO;
 import io.github.krasnoludkolo.infrastructure.ActionError;
-import io.github.krasnoludkolo.infrastructure.Repository;
-import io.github.krasnoludkolo.points.PointFacade;
 import io.github.krasnoludkolo.resolver.Resolver;
 import io.github.krasnoludkolo.user.UserCheckers;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 
 public final class GameFacade {
 
-    private final PointFacade pointFacade;
     private final UserCheckers userCheckers;
     private final GameCheckers gameCheckers;
     private final GameService gameService;
 
-    GameFacade(PointFacade pointFacade, UserCheckers userCheckers, GameCheckers gameCheckers, Repository<Game> repository) {
-        this.pointFacade = pointFacade;
+    GameFacade(UserCheckers userCheckers, GameCheckers gameCheckers, GameService gameService) {
         this.userCheckers = userCheckers;
         this.gameCheckers = gameCheckers;
-        this.gameService = new GameService(repository);
+        this.gameService = gameService;
     }
 
-    public GameDTO createGame(){
-        return gameService.createGame();
+    public Either<? extends ActionError, GameDTO> createGame(int maxNumber){
+        return Resolver
+                .when(
+                        gameCheckers.isMaxNuberValid(maxNumber)
+                ).perform(
+                        gameService.createGame(maxNumber)
+                );
     }
 
     public List<GameDTO> getAllGames() {
         return gameService.getAllGames();
     }
 
-    public Either<? extends ActionError, GameDTO> addBet(Bet bet) {
+    public Either<? extends ActionError, GameDTO> addBet(BetDTO bet) {
         return Resolver
                 .when(
                         userCheckers.userExists(bet.userId),
                         gameCheckers.gameExists(bet.gameId)
                 ).perform(
                         gameService.addBet(bet)
-                ).map(Game::toDTO);
+                );
     }
 
     public Either<? extends ActionError, GameDTO> endGame(int id) {
@@ -47,8 +49,12 @@ public final class GameFacade {
                 .when(
                         gameCheckers.gameExists(id)
                 ).perform(
-                        gameService.endGame(id, pointFacade)
-                ).map(Game::toDTO);
+                        gameService.endGame(id)
+                );
+    }
+
+    public Option<GameDTO> getGameById(int id){
+        return gameService.getGameById(id);
     }
 
 }

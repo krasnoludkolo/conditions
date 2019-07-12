@@ -17,7 +17,8 @@ public final class GameConfiguration {
 
     private GameConfiguration(PointFacade pointFacade, UserCheckers userCheckers, Repository<Game> repository) {
         this.gameCheckers = new GameCheckers(repository);
-        this.gameFacade = new GameFacade(pointFacade, userCheckers, gameCheckers, repository);
+        GameService gameService = new GameService(repository, pointFacade);
+        this.gameFacade = new GameFacade(userCheckers, gameCheckers, gameService);
     }
 
     public GameFacade getGameFacade() {
