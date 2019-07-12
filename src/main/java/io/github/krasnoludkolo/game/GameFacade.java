@@ -1,7 +1,6 @@
 package io.github.krasnoludkolo.game;
 
 import io.github.krasnoludkolo.game.api.Bet;
-import io.github.krasnoludkolo.game.api.FinishedGameDTO;
 import io.github.krasnoludkolo.game.api.GameDTO;
 import io.github.krasnoludkolo.infrastructure.ActionError;
 import io.github.krasnoludkolo.infrastructure.Repository;
@@ -16,21 +15,21 @@ public final class GameFacade {
     private final PointFacade pointFacade;
     private final UserCheckers userCheckers;
     private final GameCheckers gameCheckers;
-    private final Repository<Game> repository;
     private final GameService gameService;
 
     GameFacade(PointFacade pointFacade, UserCheckers userCheckers, GameCheckers gameCheckers, Repository<Game> repository) {
         this.pointFacade = pointFacade;
         this.userCheckers = userCheckers;
         this.gameCheckers = gameCheckers;
-        this.repository = repository;
         this.gameService = new GameService(repository);
     }
 
+    public GameDTO createGame(){
+        return gameService.createGame();
+    }
+
     public List<GameDTO> getAllGames() {
-        return repository
-                .findAll()
-                .map(Game::toDTO);
+        return gameService.getAllGames();
     }
 
     public Either<? extends ActionError, GameDTO> addBet(Bet bet) {
@@ -50,10 +49,6 @@ public final class GameFacade {
                 ).perform(
                         gameService.endGame(id, pointFacade)
                 ).map(Game::toDTO);
-    }
-
-    public GameDTO createGame(){
-        return gameService.createGame();
     }
 
 }

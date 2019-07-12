@@ -5,6 +5,7 @@ import io.github.krasnoludkolo.game.api.GameDTO;
 import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.points.PointFacade;
 import io.github.krasnoludkolo.resolver.Action;
+import io.vavr.collection.List;
 
 final class GameService {
 
@@ -32,5 +33,11 @@ final class GameService {
 
     GameDTO createGame() {
         return null;
+    }
+
+    List<GameDTO> getAllGames() {
+        return repository
+                .findAll()
+                .map(Game::toDTO);
     }
 }
