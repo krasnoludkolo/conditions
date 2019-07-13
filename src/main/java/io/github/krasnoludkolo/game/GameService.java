@@ -8,14 +8,18 @@ import io.github.krasnoludkolo.resolver.Action;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 
+import java.util.Random;
+
 final class GameService {
 
     private final Repository<Game> repository;
     private final PointFacade pointFacade;
+    private final Random random;
 
-    GameService(Repository<Game> repository, PointFacade pointFacade) {
+    GameService(Repository<Game> repository, PointFacade pointFacade, Random random) {
         this.repository = repository;
         this.pointFacade = pointFacade;
+        this.random = random;
     }
 
     Action<GameDTO> addBet(NewBetDTO bet){
@@ -37,7 +41,7 @@ final class GameService {
     }
 
     Action<GameDTO> createGame(int maxNumber) {
-        return ()->Option.of(Game.create(maxNumber))
+        return ()->Option.of(Game.create(maxNumber,random))
                 .map(repository::save)
                 .map(Game::toDTO)
                 .get();

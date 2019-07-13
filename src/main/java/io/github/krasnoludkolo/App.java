@@ -19,7 +19,7 @@ final class App {
         UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.getPointFacade());
         UserFacade userFacade = userConfiguration.getUserFacade();
 
-        GameConfiguration gameConfiguration = GameConfiguration.inMemory(pointConfiguration.getPointFacade(), userConfiguration.getUserCheckers());
+        GameConfiguration gameConfiguration = GameConfiguration.inMemoryWithRandom(pointConfiguration.getPointFacade(), userConfiguration.getUserCheckers());
         GameFacade gameFacade = gameConfiguration.getGameFacade();
 
         Javalin app = Javalin.create().start(7000);
