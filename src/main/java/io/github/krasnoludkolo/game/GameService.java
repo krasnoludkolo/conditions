@@ -1,7 +1,7 @@
 package io.github.krasnoludkolo.game;
 
-import io.github.krasnoludkolo.game.api.BetDTO;
 import io.github.krasnoludkolo.game.api.GameDTO;
+import io.github.krasnoludkolo.game.api.NewBetDTO;
 import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.points.PointFacade;
 import io.github.krasnoludkolo.resolver.Action;
@@ -18,7 +18,7 @@ final class GameService {
         this.pointFacade = pointFacade;
     }
 
-    Action<GameDTO> addBet(BetDTO bet){
+    Action<GameDTO> addBet(NewBetDTO bet){
         return () -> repository
                 .findOne(bet.gameId)
                 .map(g->g.addBet(bet))

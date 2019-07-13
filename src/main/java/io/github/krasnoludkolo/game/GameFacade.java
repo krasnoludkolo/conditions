@@ -1,7 +1,7 @@
 package io.github.krasnoludkolo.game;
 
-import io.github.krasnoludkolo.game.api.BetDTO;
 import io.github.krasnoludkolo.game.api.GameDTO;
+import io.github.krasnoludkolo.game.api.NewBetDTO;
 import io.github.krasnoludkolo.infrastructure.ActionError;
 import io.github.krasnoludkolo.resolver.Resolver;
 import io.github.krasnoludkolo.user.UserCheckers;
@@ -21,7 +21,7 @@ public final class GameFacade {
         this.gameService = gameService;
     }
 
-    public Either<? extends ActionError, GameDTO> createGame(int maxNumber){
+    public Either<ActionError, GameDTO> createGame(int maxNumber){
         return Resolver
                 .when(
                         gameCheckers.isMaxNuberValid(maxNumber)
@@ -34,7 +34,7 @@ public final class GameFacade {
         return gameService.getAllGames();
     }
 
-    public Either<? extends ActionError, GameDTO> addBet(BetDTO bet) {
+    public Either<ActionError, GameDTO> addBet(NewBetDTO bet) {
         return Resolver
                 .when(
                         userCheckers.userExists(bet.userId),
@@ -44,7 +44,7 @@ public final class GameFacade {
                 );
     }
 
-    public Either<? extends ActionError, GameDTO> endGame(int id) {
+    public Either<ActionError, GameDTO> endGame(int id) {
         return Resolver
                 .when(
                         gameCheckers.gameExists(id)

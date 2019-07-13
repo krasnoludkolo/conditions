@@ -13,7 +13,7 @@ public final class ResponseResolver {
     private ResponseResolver() {
     }
 
-    public static Context resolve(Either<? extends ActionError, ?> input, Context ctx) {
+    public static Context resolve(Either<ActionError, ?> input, Context ctx) {
         return input
                 .map(toJson(ctx))
                 .getOrElseGet(error -> createErrorResponse(error, ctx));

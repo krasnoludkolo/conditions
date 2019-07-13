@@ -1,6 +1,8 @@
 package io.github.krasnoludkolo;
 
 import io.github.krasnoludkolo.game.GameConfiguration;
+import io.github.krasnoludkolo.game.GameFacade;
+import io.github.krasnoludkolo.game.api.GameDTO;
 import io.github.krasnoludkolo.infrastructure.http.ResponseResolver;
 import io.github.krasnoludkolo.points.PointConfiguration;
 import io.github.krasnoludkolo.user.UserConfiguration;
@@ -17,13 +19,21 @@ final class App {
         UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.getPointFacade());
         UserFacade userFacade = userConfiguration.getUserFacade();
 
-        GameConfiguration.inMemory(pointConfiguration.getPointFacade(),userConfiguration.getUserCheckers());
+        GameConfiguration gameConfiguration = GameConfiguration.inMemory(pointConfiguration.getPointFacade(), userConfiguration.getUserCheckers());
+        GameFacade gameFacade = gameConfiguration.getGameFacade();
 
         Javalin app = Javalin.create().start(7000);
 
         Handler createUser = ctx -> {
             int id = userFacade.createUser().getId();
             ctx.redirect("/user/" + id);
+        };
+
+        Handler createGame = ctx -> {
+            Integer maxNumber = ctx.pathParam("max", Integer.class).get();
+            gameFacade.createGame(maxNumber)
+                    .map(GameDTO::getId)
+                    .peek(id -> ctx.redirect("/game/" + id));
         };
 
         Handler getUser = ctx -> {
@@ -33,6 +43,7 @@ final class App {
 
         app
                 .post("/user", createUser)
+                .post("/game", createGame)
                 .get("/user/:id", getUser);
 
     }
