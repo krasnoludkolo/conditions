@@ -9,7 +9,7 @@ import io.vavr.control.Option;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class GameFacadeTest {
 
@@ -26,7 +26,10 @@ public class GameFacadeTest {
 
     @Test
     public void shouldCreateAndGetGame() {
-        Integer id = gameFacade.createGame(10).get().getId();
+        Integer id = gameFacade
+                .createGame(10)
+                .get()
+                .getId();
         Option<GameDTO> gameById = gameFacade.getGameById(id);
         assertTrue(gameById.isDefined());
     }

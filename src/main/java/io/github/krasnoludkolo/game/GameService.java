@@ -37,7 +37,10 @@ final class GameService {
     }
 
     Action<GameDTO> createGame(int maxNumber) {
-        return ()->null;
+        return ()->Option.of(Game.create(maxNumber))
+                .map(repository::save)
+                .map(Game::toDTO)
+                .get();
     }
 
     List<GameDTO> getAllGames() {
