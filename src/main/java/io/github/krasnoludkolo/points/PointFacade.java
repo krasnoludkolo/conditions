@@ -16,7 +16,7 @@ public class PointFacade {
         this.pointCheckers = pointCheckers;
     }
 
-    public Either<? extends ActionError,Success> addPointToUser(int userId){
+    public Either<ActionError,Success> addPointToUser(int userId){
         return Resolver
                 .when(
                         pointCheckers.userExists(userId)
@@ -26,7 +26,7 @@ public class PointFacade {
                 );
     }
 
-    public Either<? extends ActionError,Integer> getUserPoints(int userId){
+    public Either<ActionError,Integer> getUserPoints(int userId){
         return Resolver
                 .when(
                         pointCheckers.userExists(userId)
@@ -36,7 +36,7 @@ public class PointFacade {
                 );
     }
 
-    public Either<? extends ActionError, Integer> createResultForUser(int id){
+    public Either<ActionError, Integer> createResultForUser(int id){
         return Resolver
                 .when(
                         pointCheckers.userNotExists(id)

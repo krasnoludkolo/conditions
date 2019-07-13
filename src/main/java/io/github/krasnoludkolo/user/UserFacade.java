@@ -26,7 +26,7 @@ public class UserFacade {
                 );
     }
 
-    public Either<? extends ActionError, UserDTO> getUserInfo(int id){
+    public Either<ActionError, UserDTO> getUserInfo(int id){
         return Resolver
                 .when(
                         userCheckers.userExists(id)
