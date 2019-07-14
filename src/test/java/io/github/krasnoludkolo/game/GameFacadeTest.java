@@ -1,6 +1,7 @@
 package io.github.krasnoludkolo.game;
 
 import io.github.krasnoludkolo.game.api.BetDTO;
+import io.github.krasnoludkolo.game.api.FinishedGameDTO;
 import io.github.krasnoludkolo.game.api.GameDTO;
 import io.github.krasnoludkolo.game.api.NewBetDTO;
 import io.github.krasnoludkolo.points.PointConfiguration;
@@ -14,7 +15,8 @@ import org.junit.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GameFacadeTest {
 
@@ -83,7 +85,11 @@ public class GameFacadeTest {
     }
 
     @Test
-    public void endGame() {
-        fail("Not implemented");
+    public void shouldEndedGameReturningFinishGameDTO() {
+        int id = gameFacade.createGame(10).get().getId();
+
+        GameDTO gameDTO = gameFacade.getGameById(id).get();
+
+        assertTrue(gameDTO instanceof FinishedGameDTO);
     }
 }
