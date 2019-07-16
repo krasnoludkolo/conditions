@@ -1,52 +1,45 @@
 package io.github.krasnoludkolo;
 
 import io.github.krasnoludkolo.game.GameConfiguration;
-import io.github.krasnoludkolo.game.GameFacade;
-import io.github.krasnoludkolo.game.api.GameDTO;
-import io.github.krasnoludkolo.infrastructure.http.ResponseResolver;
+import io.github.krasnoludkolo.infrastructure.http.Controller;
+import io.github.krasnoludkolo.infrastructure.http.JavalinHandler;
 import io.github.krasnoludkolo.points.PointConfiguration;
 import io.github.krasnoludkolo.user.UserConfiguration;
-import io.github.krasnoludkolo.user.UserFacade;
-import io.javalin.Handler;
 import io.javalin.Javalin;
+import io.javalin.json.JavalinJackson;
+import io.vavr.collection.List;
+import io.vavr.jackson.datatype.VavrModule;
 
 final class App {
 
     void start() {
-
         PointConfiguration pointConfiguration = PointConfiguration.inMemory();
-
         UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.getPointFacade());
-        UserFacade userFacade = userConfiguration.getUserFacade();
-
-        GameConfiguration gameConfiguration = GameConfiguration.inMemoryWithRandom(pointConfiguration.getPointFacade(), userConfiguration.getUserCheckers());
-        GameFacade gameFacade = gameConfiguration.getGameFacade();
+        GameConfiguration gameConfiguration = GameConfiguration.inMemoryWithRandom(pointConfiguration.getPointFacade(), userConfiguration.userCheckers);
 
         Javalin app = Javalin.create().start(7000);
 
-        Handler createUser = ctx -> {
-            int id = userFacade.createUser().getId();
-            ctx.redirect("/user/" + id);
-        };
+        List<Controller> controllers = List.of(
+                gameConfiguration.gameRestController,
+                userConfiguration.userRestController
+        );
 
-        Handler createGame = ctx -> {
-            Integer maxNumber = ctx.pathParam("max", Integer.class).get();
-            gameFacade.createGame(maxNumber)
-                    .map(GameDTO::getId)
-                    .peek(id -> ctx.redirect("/game/" + id));
-        };
+        List<JavalinHandler> handlers = controllers.flatMap(Controller::handlers);
 
-        Handler getUser = ctx -> {
-            Integer id = ctx.queryParam("id", Integer.class).get();
-            ResponseResolver.resolve(userFacade.getUserInfo(id), ctx);
-        };
+        addHandlers(app, handlers);
 
-        app
-                .post("/user", createUser)
-                .post("/game", createGame)
-                .get("/user/:id", getUser);
-
+        JavalinJackson.getObjectMapper().registerModule(new VavrModule());
     }
 
+
+    private Javalin addHandlers(Javalin application, List<JavalinHandler> handlers) {
+        return handlers
+                .foldLeft(application, this::addHandler);
+    }
+
+    private Javalin addHandler(Javalin app, JavalinHandler h) {
+        return app
+                .addHandler(h.handlerType, h.path, h.handler);
+    }
 
 }

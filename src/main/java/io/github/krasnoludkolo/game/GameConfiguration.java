@@ -9,8 +9,9 @@ import java.util.Random;
 
 public final class GameConfiguration {
 
-    private final GameFacade gameFacade;
-    private final GameCheckers gameCheckers;
+    public final GameFacade gameFacade;
+    public final GameCheckers gameCheckers;
+    public final GameRestController gameRestController;
 
     public static GameConfiguration inMemoryWithRandom(PointFacade pointFacade, UserCheckers userCheckers){
         Repository<Game> repository = new InMemoryRepository<>();
@@ -27,13 +28,7 @@ public final class GameConfiguration {
         this.gameCheckers = new GameCheckers(repository);
         GameService gameService = new GameService(repository, pointFacade,random);
         this.gameFacade = new GameFacade(userCheckers, gameCheckers, gameService);
+        this.gameRestController = new GameRestController(gameFacade);
     }
 
-    public GameFacade getGameFacade() {
-        return gameFacade;
-    }
-
-    public GameCheckers getGameCheckers() {
-        return gameCheckers;
-    }
 }

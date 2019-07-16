@@ -6,8 +6,9 @@ import io.github.krasnoludkolo.points.PointFacade;
 
 public final class UserConfiguration {
 
-    private UserFacade userFacade;
-    private UserCheckers userCheckers;
+    public final UserFacade userFacade;
+    public final UserCheckers userCheckers;
+    public final UserRestController userRestController;
 
     public static UserConfiguration inMemory(PointFacade pointFacade){
         Repository<User> repository = new InMemoryRepository<>();
@@ -17,13 +18,7 @@ public final class UserConfiguration {
     private UserConfiguration(Repository<User> repository, PointFacade pointFacade){
         userCheckers = new UserCheckers(repository);
         userFacade = new UserFacade(userCheckers,repository, pointFacade);
+        userRestController = new UserRestController(userFacade);
     }
 
-    public UserFacade getUserFacade() {
-        return userFacade;
-    }
-
-    public UserCheckers getUserCheckers() {
-        return userCheckers;
-    }
 }
