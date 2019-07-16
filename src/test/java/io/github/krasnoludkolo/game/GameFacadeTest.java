@@ -30,10 +30,10 @@ public class GameFacadeTest {
     public void init(){
         PointFacade pointFacade = PointConfiguration.inMemory().getPointFacade();
         UserConfiguration userConfiguration = UserConfiguration.inMemory(pointFacade);
-        UserCheckers userCheckers = userConfiguration.getUserCheckers();
-        userFacade = userConfiguration.getUserFacade();
+        UserCheckers userCheckers = userConfiguration.userCheckers;
+        userFacade = userConfiguration.userFacade;
         Random random = new Always4Random();
-        gameFacade = GameConfiguration.inMemoryWithRandom(pointFacade,userCheckers,random).getGameFacade();
+        gameFacade = GameConfiguration.inMemoryWithRandom(pointFacade,userCheckers,random).gameFacade;
     }
 
 
