@@ -87,7 +87,6 @@ class Game implements Identifiable<Integer> {
             this.winnerNumber = winnerNumber;
         }
 
-
         @Override
         GameDTO toDTO() {
             List<BetDTO> b = getBetsAsBetDTOList();
