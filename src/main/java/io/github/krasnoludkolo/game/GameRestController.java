@@ -9,7 +9,6 @@ import io.vavr.collection.List;
 
 public final class GameRestController implements Controller {
 
-
     private final Handler createGame;
     private final Handler getGame;
 
@@ -26,7 +25,6 @@ public final class GameRestController implements Controller {
         };
 
     }
-
 
     @Override
     public List<JavalinHandler> handlers() {
