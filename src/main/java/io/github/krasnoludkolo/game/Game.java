@@ -80,7 +80,6 @@ class Game implements Identifiable<Integer> {
         private final List<Integer> winners;
         private final int winnerNumber;
 
-
         private FinishedGame(List<Integer> winners, int winnerNumber) {
             super(id, maxNumber, bets, random);
             this.winners = winners;
