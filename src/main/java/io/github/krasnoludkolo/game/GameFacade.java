@@ -24,7 +24,7 @@ public final class GameFacade {
     public Either<ActionError, GameDTO> createGame(int maxNumber){
         return Resolver
                 .when(
-                        gameCheckers.isMaxNuberValid(maxNumber)
+                        gameCheckers.isMaxNumberValid(maxNumber)
                 ).perform(
                         gameService.createGame(maxNumber)
                 );
@@ -38,7 +38,8 @@ public final class GameFacade {
         return Resolver
                 .when(
                         userCheckers.userExists(bet.userId),
-                        gameCheckers.gameExists(bet.gameId)
+                        gameCheckers.gameExists(bet.gameId),
+                        gameCheckers.isBetPossible(bet.bet,bet.gameId)
                 ).perform(
                         gameService.addBet(bet)
                 );

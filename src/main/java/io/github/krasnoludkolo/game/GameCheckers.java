@@ -23,10 +23,23 @@ final class GameCheckers {
                 .map(Success::new);
     }
 
-    public Condition<ActionError> isMaxNuberValid(int maxNumber) {
+    public Condition<ActionError> isMaxNumberValid(int maxNumber) {
         return () -> maxNumber > 0 ?
                 Either.right(new Success())
                 :
                 Either.left((ActionError)GameActionError.NEGATIVE_MAX_NUMBER);
     }
+
+    public Condition<ActionError> isBetPossible(int bet, int gameId) {
+        return () -> repository
+                .findOne(gameId)
+                .map(game -> game.isBetPossible(bet))
+                .toEither((ActionError)GameActionError.GAME_NOT_FOUND)
+                .flatMap(possible ->
+                        possible ?
+                                Either.right(new Success())
+                                :
+                                Either.left(GameActionError.IMPOSSIBLE_BET));
+    }
+
 }

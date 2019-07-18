@@ -1,9 +1,7 @@
 package io.github.krasnoludkolo.game;
 
-import io.github.krasnoludkolo.game.api.BetDTO;
-import io.github.krasnoludkolo.game.api.FinishedGameDTO;
-import io.github.krasnoludkolo.game.api.GameDTO;
-import io.github.krasnoludkolo.game.api.NewBetDTO;
+import io.github.krasnoludkolo.game.api.*;
+import io.github.krasnoludkolo.infrastructure.ActionError;
 import io.github.krasnoludkolo.points.PointConfiguration;
 import io.github.krasnoludkolo.points.PointFacade;
 import io.github.krasnoludkolo.user.UserCheckers;
@@ -24,7 +22,7 @@ public class GameFacadeTest {
     private GameFacade gameFacade;
     private UserFacade userFacade;
     private final static int LOOSING_BET = 2;
-    private final static int WINNING_BET = 4;
+    private final static int WINNING_BET = 5;
 
     @Before
     public void init(){
@@ -88,8 +86,44 @@ public class GameFacadeTest {
     public void shouldEndedGameReturningFinishGameDTO() {
         int id = gameFacade.createGame(10).get().getId();
 
-        GameDTO gameDTO = gameFacade.getGameById(id).get();
+        gameFacade.endGame(id);
 
+        GameDTO gameDTO = gameFacade.getGameById(id).get();
         assertTrue(gameDTO instanceof FinishedGameDTO);
     }
+
+    @Test
+    public void shouldNotBeAbleToMakeImpossibleBet(){
+        int maxNumber = 5;
+        int impossibleBet = maxNumber + 1;
+        int game = gameFacade.createGame(maxNumber).get().getId();
+        int user = userFacade.createUser().getId();
+
+        ActionError error = gameFacade.addBet(new NewBetDTO(game, user, impossibleBet)).getLeft();
+
+        assertEquals(GameActionError.IMPOSSIBLE_BET,error);
+    }
+
+    @Test
+    public void shouldWinningNumberBeInResult(){
+        int game = gameFacade.createGame(5).get().getId();
+
+        gameFacade.endGame(game);
+
+        FinishedGameDTO gameDTO = (FinishedGameDTO)gameFacade.getGameById(game).get();
+        assertEquals(5,gameDTO.winnerNumber);
+    }
+
+    @Test
+    public void shouldWinWithWinningBet(){
+        int game = gameFacade.createGame(5).get().getId();
+        int user = userFacade.createUser().getId();
+
+        gameFacade.addBet(new NewBetDTO(game,user,WINNING_BET));
+        gameFacade.endGame(game);
+
+        FinishedGameDTO gameDTO = (FinishedGameDTO)gameFacade.getGameById(game).get();
+        assertTrue(gameDTO.winnersId.contains(user));
+    }
+
 }
