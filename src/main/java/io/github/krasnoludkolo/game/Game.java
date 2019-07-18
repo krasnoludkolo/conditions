@@ -47,9 +47,9 @@ class Game implements Identifiable<Integer> {
         return bets.values().map(Bet::toBetDTO).toList();
     }
 
-    Game addBet(NewBetDTO bet) {
-        Bet newBet = new Bet(bet.userId, bet.bet);
-        Map<Integer, Bet> newBetMap = bets.put(bet.userId, newBet);
+    Game addBet(NewBetDTO newBet) {
+        Bet bet = Bet.from(newBet);
+        Map<Integer, Bet> newBetMap = bets.put(newBet.userId, bet);
         return new Game(id, maxNumber, newBetMap, random);
     }
 
