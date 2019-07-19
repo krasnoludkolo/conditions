@@ -10,3 +10,12 @@ GET http://localhost:7000/api/games
 Accept: application/json
 
 ###
+
+POST http://localhost:7000/api/register
+Content-Type: application/json
+
+{
+"password": "password"
+}
+
+###
