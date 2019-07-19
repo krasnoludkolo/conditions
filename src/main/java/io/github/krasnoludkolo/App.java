@@ -17,8 +17,8 @@ final class App {
 
     void start() {
         PointConfiguration pointConfiguration = PointConfiguration.inMemory();
-        UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.getPointFacade());
-        GameConfiguration gameConfiguration = GameConfiguration.inMemoryWithRandom(pointConfiguration.getPointFacade(), userConfiguration.userCheckers);
+        UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.pointFacade);
+        GameConfiguration gameConfiguration = GameConfiguration.inMemoryWithRandom(pointConfiguration.pointFacade, userConfiguration.userCheckers);
         AuthConfiguration authConfiguration = AuthConfiguration.inMemory(userConfiguration.userFacade);
 
         Javalin app = Javalin.create().start(7000);

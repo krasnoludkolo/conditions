@@ -18,7 +18,6 @@ import static org.junit.Assert.assertTrue;
 
 public class GameFacadeTest {
 
-
     private GameFacade gameFacade;
     private UserFacade userFacade;
     private final static int LOOSING_BET = 2;
@@ -26,7 +25,7 @@ public class GameFacadeTest {
 
     @Before
     public void init(){
-        PointFacade pointFacade = PointConfiguration.inMemory().getPointFacade();
+        PointFacade pointFacade = PointConfiguration.inMemory().pointFacade;
         UserConfiguration userConfiguration = UserConfiguration.inMemory(pointFacade);
         UserCheckers userCheckers = userConfiguration.userCheckers;
         userFacade = userConfiguration.userFacade;

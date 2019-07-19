@@ -5,8 +5,8 @@ import io.github.krasnoludkolo.infrastructure.Repository;
 
 public final class PointConfiguration {
 
-    private final PointCheckers pointCheckers;
-    private final PointFacade pointFacade;
+    public final PointCheckers pointCheckers;
+    public final PointFacade pointFacade;
 
     public static PointConfiguration inMemory(){
         Repository<Point> repository = new InMemoryRepository<>();
@@ -18,11 +18,4 @@ public final class PointConfiguration {
         this.pointFacade = new PointFacade(repository, pointCheckers);
     }
 
-    public PointFacade getPointFacade() {
-        return pointFacade;
-    }
-
-    public PointCheckers getPointCheckers() {
-        return pointCheckers;
-    }
 }
