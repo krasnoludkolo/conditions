@@ -38,5 +38,9 @@ public final class ResponseResolver {
                 .getOrElse(ctx.status(404));
     }
 
+    public static Context resolve(Object input, Context ctx) {
+        return toJson(ctx).apply(input);
+    }
+
 
 }

@@ -1,16 +1,15 @@
-package io.github.krasnoludkolo.user.api;
+package io.github.krasnoludkolo.auth.api;
 
 import io.github.krasnoludkolo.infrastructure.ActionError;
 
-public enum UserActionError implements ActionError {
-    USER_IS_NOT_ADMIN("User is not admin",400),
+public enum UserAuthError implements ActionError {
     WRONG_PASSWORD("Wrong password",400),
-    USER_NOT_FOUND("User not found",404);
+    INVALID_TOKEN("Invalid token",400);
 
     private String message;
     private int code;
 
-    UserActionError(String message, int code) {
+    UserAuthError(String message, int code) {
         this.message = message;
         this.code = code;
     }

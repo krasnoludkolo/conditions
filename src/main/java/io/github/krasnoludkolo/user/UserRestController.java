@@ -14,8 +14,8 @@ public final class UserRestController implements Controller {
     UserRestController(UserFacade userFacade) {
 
         createUser = ctx -> {
-            int id = userFacade.createUser().getId();
-            ctx.redirect("/user/" + id);
+//            int id = userFacade.createUserWithId().getId();
+//            ctx.redirect("/users/" + id);
         };
 
         getUser = ctx -> {
@@ -26,8 +26,8 @@ public final class UserRestController implements Controller {
 
     public List<JavalinHandler> handlers(){
         return List.of(
-            JavalinHandler.get("/user/:id",getUser),
-            JavalinHandler.post("/user",createUser)
+            JavalinHandler.get("/users/:id",getUser),
+            JavalinHandler.post("/users",createUser)
         );
     }
 

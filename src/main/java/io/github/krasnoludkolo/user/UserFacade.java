@@ -18,10 +18,10 @@ public class UserFacade {
         this.userService = new UserService(repository, pointFacade);
     }
 
-    public UserDTO createUser(){
+    public UserDTO createUserWithId(int id){
         return Resolver
                 .perform(
-                        userService.createUser()
+                        userService.createUser(id)
 
                 );
     }
@@ -47,6 +47,5 @@ public class UserFacade {
                         userService.promoteToAdmin(userId)
                 );
     }
-
 
 }

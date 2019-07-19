@@ -12,6 +12,8 @@ import io.vavr.jackson.datatype.VavrModule;
 
 final class App {
 
+    private String API_PREFIX = "/api";
+
     void start() {
         PointConfiguration pointConfiguration = PointConfiguration.inMemory();
         UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.getPointFacade());
@@ -29,6 +31,8 @@ final class App {
         addHandlers(app, handlers);
 
         JavalinJackson.getObjectMapper().registerModule(new VavrModule());
+
+
     }
 
 
@@ -39,7 +43,7 @@ final class App {
 
     private Javalin addHandler(Javalin app, JavalinHandler h) {
         return app
-                .addHandler(h.handlerType, h.path, h.handler);
+                .addHandler(h.handlerType, API_PREFIX+h.path, h.handler);
     }
 
 }

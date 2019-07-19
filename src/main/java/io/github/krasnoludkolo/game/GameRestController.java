@@ -11,26 +11,29 @@ public final class GameRestController implements Controller {
 
     private final Handler createGame;
     private final Handler getGame;
+    private final Handler getAllGames;
 
     GameRestController(GameFacade gameFacade){
         createGame = ctx -> {
             int maxNumber = ctx.queryParam("max", Integer.class).get();
             gameFacade.createGame(maxNumber)
                     .map(GameDTO::getId)
-                    .peek(id -> ctx.redirect("/game/" + id));
+                    .peek(id -> ctx.redirect("/games/" + id));
         };
         getGame = ctx -> {
             int id = ctx.pathParam("id", Integer.class).get();
             ResponseResolver.resolve(gameFacade.getGameById(id), ctx);
         };
 
+        getAllGames = ctx -> ResponseResolver.resolve(gameFacade.getAllGames(),ctx);
     }
 
     @Override
     public List<JavalinHandler> handlers() {
         return List.of(
-                JavalinHandler.post("/game",createGame),
-                JavalinHandler.get("/game/:id",getGame)
+                JavalinHandler.post("/games",createGame),
+                JavalinHandler.get("/games",getAllGames),
+                JavalinHandler.get("/games/:id",getGame)
         );
     }
 }

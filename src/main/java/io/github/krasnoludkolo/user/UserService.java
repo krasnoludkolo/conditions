@@ -24,10 +24,10 @@ final class UserService {
                 .get();
     }
 
-    Action<UserDTO> createUser() {
+    Action<UserDTO> createUser(int id) {
         return () -> {
-            User user = User.createNormal();
-            pointFacade.createResultForUser(user.getId());
+            User user = User.createNormal(id);
+            pointFacade.createResultForUser(id);
             return repository
                     .save(user)
                     .toDTO();

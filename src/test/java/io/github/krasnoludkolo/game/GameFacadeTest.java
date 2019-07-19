@@ -72,7 +72,7 @@ public class GameFacadeTest {
 
     @Test
     public void shouldAddBet() {
-        int userId = userFacade.createUser().getId();
+        int userId = userFacade.createUserWithId().getId();
         int gameId = gameFacade.createGame(2).get().getId();
 
         gameFacade.addBet(new NewBetDTO(gameId, userId, LOOSING_BET));
@@ -97,7 +97,7 @@ public class GameFacadeTest {
         int maxNumber = 5;
         int impossibleBet = maxNumber + 1;
         int game = gameFacade.createGame(maxNumber).get().getId();
-        int user = userFacade.createUser().getId();
+        int user = userFacade.createUserWithId().getId();
 
         ActionError error = gameFacade.addBet(new NewBetDTO(game, user, impossibleBet)).getLeft();
 
@@ -117,7 +117,7 @@ public class GameFacadeTest {
     @Test
     public void shouldWinWithWinningBet(){
         int game = gameFacade.createGame(5).get().getId();
-        int user = userFacade.createUser().getId();
+        int user = userFacade.createUserWithId().getId();
 
         gameFacade.addBet(new NewBetDTO(game,user,WINNING_BET));
         gameFacade.endGame(game);
