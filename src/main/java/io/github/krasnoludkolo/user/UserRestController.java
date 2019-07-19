@@ -8,16 +8,9 @@ import io.vavr.collection.List;
 
 public final class UserRestController implements Controller {
 
-    private final Handler createUser;
     private final Handler getUser;
 
     UserRestController(UserFacade userFacade) {
-
-        createUser = ctx -> {
-//            int id = userFacade.createUserWithId().getId();
-//            ctx.redirect("/users/" + id);
-        };
-
         getUser = ctx -> {
             Integer id = ctx.pathParam("id", Integer.class).get();
             ResponseResolver.resolve(userFacade.getUserInfo(id), ctx);
@@ -26,8 +19,7 @@ public final class UserRestController implements Controller {
 
     public List<JavalinHandler> handlers(){
         return List.of(
-            JavalinHandler.get("/users/:id",getUser),
-            JavalinHandler.post("/users",createUser)
+            JavalinHandler.get("/users/:id",getUser)
         );
     }
 

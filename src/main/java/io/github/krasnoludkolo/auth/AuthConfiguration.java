@@ -8,16 +8,20 @@ public final class AuthConfiguration {
 
     public final AuthFacade authFacade;
     public final AuthenticationCheckers authenticationCheckers;
+    public final LoginRestController loginRestController;
 
-    static AuthConfiguration inMemory(UserFacade userFacade){
+    public static AuthConfiguration inMemory(UserFacade userFacade){
         Repository<AuthUser> repository = new InMemoryRepository<>();
         return new AuthConfiguration(userFacade, repository);
     }
 
     private AuthConfiguration(UserFacade userFacade, Repository<AuthUser> repository) {
+
         PasswordEncrypt passwordEncrypt = new PlainTextPasswordEncrypt();
         TokenGenerator tokenGenerator = new TokenGenerator();
+        Registration registration = new Registration(repository, passwordEncrypt, userFacade);
         this.authenticationCheckers = new AuthenticationCheckers(repository, passwordEncrypt, tokenGenerator);
-        this.authFacade = new AuthFacade(userFacade, authenticationCheckers);
+        this.authFacade = new AuthFacade(authenticationCheckers, registration);
+        this.loginRestController = new LoginRestController(authFacade);
     }
 }

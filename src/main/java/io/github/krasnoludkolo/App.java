@@ -1,5 +1,6 @@
 package io.github.krasnoludkolo;
 
+import io.github.krasnoludkolo.auth.AuthConfiguration;
 import io.github.krasnoludkolo.game.GameConfiguration;
 import io.github.krasnoludkolo.infrastructure.http.Controller;
 import io.github.krasnoludkolo.infrastructure.http.JavalinHandler;
@@ -18,12 +19,14 @@ final class App {
         PointConfiguration pointConfiguration = PointConfiguration.inMemory();
         UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.getPointFacade());
         GameConfiguration gameConfiguration = GameConfiguration.inMemoryWithRandom(pointConfiguration.getPointFacade(), userConfiguration.userCheckers);
+        AuthConfiguration authConfiguration = AuthConfiguration.inMemory(userConfiguration.userFacade);
 
         Javalin app = Javalin.create().start(7000);
 
         List<Controller> controllers = List.of(
                 gameConfiguration.gameRestController,
-                userConfiguration.userRestController
+                userConfiguration.userRestController,
+                authConfiguration.loginRestController
         );
 
         List<JavalinHandler> handlers = controllers.flatMap(Controller::handlers);
