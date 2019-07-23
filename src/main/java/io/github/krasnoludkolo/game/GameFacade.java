@@ -10,9 +10,6 @@ import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
-import static io.github.krasnoludkolo.resolver.Resolver.and;
-import static io.github.krasnoludkolo.resolver.Resolver.or;
-
 public final class GameFacade {
 
     private final UserCheckers userCheckers;
@@ -53,15 +50,10 @@ public final class GameFacade {
     public Either<ActionError, GameDTO> endGame(EndGameRequestDTO request) {
         return Resolver
                 .when(
-                        or(
-                                and(
-                                        gameCheckers.gameExists(request.getGameId()),
-                                        gameCheckers.canEndGame(request.getGameId(), request.getUserId())
-                                ),
-                                and(
-                                        userCheckers.isAdmin(request.getUserId())
-                                )
-                        )
+                        gameCheckers.gameExists(request.getGameId()),
+                        gameCheckers.canEndGame(request.getGameId(), request.getUserId())
+                ).or(
+                        userCheckers.isAdmin(request.getUserId())
 
                 ).perform(
                         gameService.endGame(request.getGameId())

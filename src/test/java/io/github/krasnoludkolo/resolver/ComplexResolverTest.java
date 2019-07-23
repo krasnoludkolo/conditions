@@ -44,6 +44,18 @@ public class ComplexResolverTest {
     }
 
     @Test
+    public void shouldDoActionWithTrueConditions3() {
+        int result = when(
+                TRUE,
+                TRUE
+        ).or(
+                TRUE
+        ).perform(RETURN_ONE).get();
+
+        assertEquals(1, result);
+    }
+
+    @Test
     public void shouldNotDoActionWithFalseConditions() {
         Either<Error, Integer> result = when(
                 and(

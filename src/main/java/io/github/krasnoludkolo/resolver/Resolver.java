@@ -67,7 +67,7 @@ public final class Resolver {
 
     @SafeVarargs
     public static <E> ResolverBuilder<E> when(Condition<E>... conditions) {
-        return when(and(conditions));
+        return new ResolverBuilder<>(new And<>(conditions));
     }
 
     @SafeVarargs
@@ -87,13 +87,23 @@ public final class Resolver {
 
     public static class ResolverBuilder<E> {
 
-        List<LogicalGroup<E>> logicalGroups;
-        private ResolverBuilder(List<LogicalGroup<E>> logicalGroup) {
-            this.logicalGroups = logicalGroup;
+        final List<LogicalGroup<E>> logicalGroups;
+
+        private ResolverBuilder(LogicalGroup<E> logicalGroup) {
+            this.logicalGroups = List.of(logicalGroup);
+        }
+
+        private ResolverBuilder(List<LogicalGroup<E>> logicalGroups) {
+            this.logicalGroups = logicalGroups;
         }
 
         public <T> Either<E, T> perform(Action<T> action) {
             return perform(action, logicalGroups);
+        }
+
+        @SafeVarargs
+        public final ResolverBuilder<E> or(Condition<E>... conditions) {
+            return new ResolverBuilder<>(logicalGroups.append(new And<>(conditions)));
         }
 
         private <T> Either<E, T> perform(Action<T> action, List<LogicalGroup<E>> logicalGroups) {

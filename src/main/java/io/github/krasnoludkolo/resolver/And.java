@@ -9,6 +9,10 @@ final class And<E> extends LogicalGroup<E> {
         super(logicalGroups);
     }
 
+    And(Condition<E>... conditions) {
+        super(List.of(conditions).map(SimpleCondition::new));
+    }
+
     @Override
     Either<E, Success> resolve() {
         List<Either<E, Success>> errors = logicalGroups
