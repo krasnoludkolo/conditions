@@ -53,6 +53,7 @@ public final class GameFacade {
                         gameCheckers.gameExists(request.getGameId()),
                         gameCheckers.canEndGame(request.getGameId(), request.getUserId())
                 ).or(
+                        gameCheckers.gameExists(request.getGameId()),
                         userCheckers.isAdmin(request.getUserId())
 
                 ).perform(
