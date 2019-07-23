@@ -46,7 +46,7 @@ final class App {
 
     private Javalin addHandler(Javalin app, JavalinHandler h) {
         return app
-                .addHandler(h.handlerType, API_PREFIX+h.path, h.handler);
+                .addHandler(h.handlerType, API_PREFIX + h.path, h.handler);
     }
 
 }

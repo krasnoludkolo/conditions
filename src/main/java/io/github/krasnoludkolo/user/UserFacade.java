@@ -26,6 +26,14 @@ public class UserFacade {
                 );
     }
 
+    public UserDTO createAdminWithId(int id){
+        return Resolver
+                .perform(
+                        userService.createAdmin(id)
+
+                );
+    }
+
     public Either<ActionError, UserDTO> getUserInfo(int id){
         return Resolver
                 .when(
@@ -40,7 +48,7 @@ public class UserFacade {
         return Resolver
                 .when(
                         userCheckers.userExists(promoterId),
-                        userCheckers.isUserAdmin(promoterId),
+                        userCheckers.isAdmin(promoterId),
                         userCheckers.userExists(userId)
                 )
                 .perform(

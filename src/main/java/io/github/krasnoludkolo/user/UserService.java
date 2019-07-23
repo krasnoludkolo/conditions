@@ -40,4 +40,14 @@ final class UserService {
                 .map(User::toDTO)
                 .get();
     }
+
+    Action<UserDTO> createAdmin(int id) {
+        return () -> {
+            User user = User.createAdmin(id);
+            pointFacade.createResultForUser(id);
+            return repository
+                    .save(user)
+                    .toDTO();
+        };
+    }
 }

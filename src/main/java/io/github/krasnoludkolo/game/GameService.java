@@ -40,8 +40,8 @@ final class GameService {
                 .get();
     }
 
-    Action<GameDTO> createGame(int maxNumber) {
-        return ()->Option.of(Game.create(maxNumber,random))
+    Action<GameDTO> createGame(int maxNumber, int gameCreatorId) {
+        return ()->Option.of(Game.create(maxNumber,random,gameCreatorId))
                 .map(repository::save)
                 .map(Game::toDTO)
                 .get();

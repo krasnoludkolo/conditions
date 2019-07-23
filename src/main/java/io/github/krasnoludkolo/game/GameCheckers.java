@@ -6,6 +6,7 @@ import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.resolver.Condition;
 import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.control.Either;
+import org.jetbrains.annotations.NotNull;
 
 final class GameCheckers {
 
@@ -19,27 +20,35 @@ final class GameCheckers {
     public Condition<ActionError> gameExists(int gameId) {
         return () -> repository
                 .findOne(gameId)
-                .toEither((ActionError)GameActionError.GAME_NOT_FOUND)
+                .toEither((ActionError) GameActionError.GAME_NOT_FOUND)
                 .map(Success::new);
     }
 
     public Condition<ActionError> isMaxNumberValid(int maxNumber) {
-        return () -> maxNumber > 0 ?
-                Either.right(new Success())
-                :
-                Either.left((ActionError)GameActionError.NEGATIVE_MAX_NUMBER);
+        return () -> evaluateBoolean(maxNumber > 0, GameActionError.IMPOSSIBLE_BET);
     }
 
     public Condition<ActionError> isBetPossible(int bet, int gameId) {
         return () -> repository
                 .findOne(gameId)
                 .map(game -> game.isBetPossible(bet))
-                .toEither((ActionError)GameActionError.GAME_NOT_FOUND)
-                .flatMap(possible ->
-                        possible ?
-                                Either.right(new Success())
-                                :
-                                Either.left(GameActionError.IMPOSSIBLE_BET));
+                .toEither((ActionError) GameActionError.GAME_NOT_FOUND)
+                .flatMap(possible -> evaluateBoolean(possible, GameActionError.IMPOSSIBLE_BET));
     }
 
+    public Condition<ActionError> canEndGame(int gameId, int userId) {
+        return () -> repository
+                .findOne(gameId)
+                .map(game -> game.canEndGame(userId))
+                .toEither((ActionError) GameActionError.GAME_NOT_FOUND)
+                .flatMap(possible -> evaluateBoolean(possible, GameActionError.USER_IS_NOT_GAME_ADMIN));
+    }
+
+    @NotNull
+    private Either<ActionError, Success> evaluateBoolean(boolean possible, GameActionError falseValue) {
+        return possible ?
+                Either.right(new Success())
+                :
+                Either.left(falseValue);
+    }
 }

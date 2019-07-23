@@ -1,5 +1,6 @@
 package io.github.krasnoludkolo.game;
 
+import io.github.krasnoludkolo.game.api.CreateGameRequestDTO;
 import io.github.krasnoludkolo.game.api.GameDTO;
 import io.github.krasnoludkolo.infrastructure.http.Controller;
 import io.github.krasnoludkolo.infrastructure.http.JavalinHandler;
@@ -15,8 +16,8 @@ public final class GameRestController implements Controller {
 
     GameRestController(GameFacade gameFacade){
         createGame = ctx -> {
-            int maxNumber = ctx.queryParam("max", Integer.class).get();
-            gameFacade.createGame(maxNumber)
+            CreateGameRequestDTO dto = ctx.bodyAsClass(CreateGameRequestDTO.class);
+            gameFacade.createGame(dto.getMaxNumber(), dto.getUserId())
                     .map(GameDTO::getId)
                     .peek(id -> ctx.redirect("/games/" + id));
         };

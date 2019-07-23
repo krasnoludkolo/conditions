@@ -14,7 +14,7 @@ public class UserCheckers {
         this.repository = repository;
     }
 
-    public Condition<ActionError> isUserAdmin(int userId) {
+    public Condition<ActionError> isAdmin(int userId) {
         return () -> repository
                 .findOne(userId)
                 .filter(user -> user.isAdmin)

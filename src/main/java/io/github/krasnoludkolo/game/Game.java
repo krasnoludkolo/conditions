@@ -19,19 +19,21 @@ class Game implements Identifiable<Integer> {
     private final int maxNumber;
     private final Map<Integer, Bet> bets;
     private final Random random;
+    private final List<Integer> admins;
 
     private static AtomicInteger currentId = new AtomicInteger(0); //for simplicity
 
-    static Game create(int maxNumber, Random random) {
+    static Game create(int maxNumber, Random random, int gameCreatorId) {
         int id = currentId.getAndIncrement();
-        return new Game(id, maxNumber, HashMap.empty(), random);
+        return new Game(id, maxNumber, HashMap.empty(), random, List.of(gameCreatorId));
     }
 
-    private Game(int id, int maxNumber, Map<Integer, Bet> bets, Random random) {
+    private Game(int id, int maxNumber, Map<Integer, Bet> bets, Random random, List<Integer> adminsList) {
         this.id = id;
         this.maxNumber = maxNumber;
         this.bets = bets;
         this.random = random;
+        this.admins = adminsList;
     }
 
     boolean isBetPossible(int bet) {
@@ -50,7 +52,7 @@ class Game implements Identifiable<Integer> {
     Game addBet(NewBetDTO newBet) {
         Bet bet = Bet.from(newBet);
         Map<Integer, Bet> newBetMap = bets.put(newBet.userId, bet);
-        return new Game(id, maxNumber, newBetMap, random);
+        return new Game(id, maxNumber, newBetMap, random, admins);
     }
 
     FinishedGame endGame(PointFacade pointFacade) {
@@ -75,13 +77,17 @@ class Game implements Identifiable<Integer> {
         return id;
     }
 
+    boolean canEndGame(int userId) {
+        return admins.contains(userId);
+    }
+
     class FinishedGame extends Game {
 
         private final List<Integer> winners;
         private final int winnerNumber;
 
         private FinishedGame(List<Integer> winners, int winnerNumber) {
-            super(id, maxNumber, bets, random);
+            super(id, maxNumber, bets, random, admins);
             this.winners = winners;
             this.winnerNumber = winnerNumber;
         }
@@ -105,6 +111,11 @@ class Game implements Identifiable<Integer> {
         @Override
         FinishedGame endGame(PointFacade pointFacade) {
             return this;
+        }
+
+        @Override
+        boolean canEndGame(int userId) {
+            return false;
         }
     }
 }
