@@ -1,6 +1,5 @@
 package io.github.krasnoludkolo.points;
 
-import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.resolver.Action;
 import io.github.krasnoludkolo.resolver.Success;
