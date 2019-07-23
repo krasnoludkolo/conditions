@@ -18,12 +18,30 @@ public final class Resolver {
         return new Or<>(List.of(logicalGroups));
     }
 
+    public static <E> LogicalGroup<E> or(LogicalGroup<E> logicalGroups){
+        return new Or<>(List.of(logicalGroups));
+    }
+
     @SafeVarargs
     public static <E> LogicalGroup<E> or(Condition<E>... conditions){
         List<LogicalGroup<E>> simpleLogicalGroups = List
                 .of(conditions)
                 .map(SimpleCondition::new);
         return new Or<>(simpleLogicalGroups);
+    }
+
+    public static <E> LogicalGroup<E> or(Condition<E> conditions){
+        List<LogicalGroup<E>> simpleLogicalGroups = List
+                .of(conditions)
+                .map(SimpleCondition::new);
+        return new Or<>(simpleLogicalGroups);
+    }
+
+    public static <E> LogicalGroup<E> and(Condition<E> conditions){
+        List<LogicalGroup<E>> simpleLogicalGroups = List
+                .of(conditions)
+                .map(SimpleCondition::new);
+        return new And<>(simpleLogicalGroups);
     }
 
     @SafeVarargs
@@ -34,8 +52,7 @@ public final class Resolver {
         return new And<>(simpleLogicalGroups);
     }
 
-    @SafeVarargs
-    public static <E> LogicalGroup<E> and(LogicalGroup<E> logicalGroups, Condition<E>... conditions){
+    public static <E> LogicalGroup<E> and(LogicalGroup<E> logicalGroups){
         return new And<>(List.of(logicalGroups));
     }
 
@@ -50,7 +67,7 @@ public final class Resolver {
 
     @SafeVarargs
     public static <E> ResolverBuilder<E> when(Condition<E>... conditions) {
-        return when(or(conditions));
+        return when(and(conditions));
     }
 
     @SafeVarargs

@@ -3,7 +3,7 @@ package io.github.krasnoludkolo.resolver;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
 
-abstract class LogicalGroup<E> {
+public abstract class LogicalGroup<E> {
 
     List<LogicalGroup<E>> logicalGroups;
 
