@@ -36,10 +36,11 @@ public final class GameRestController implements Controller {
         ResponseResolver
                 .resolve(gameFacade.getAllGames(), ctx);
     }
+
     private void getGame(Context ctx){
         int id = ctx.pathParam("id", Integer.class).get();
         ResponseResolver
                 .resolve(gameFacade.getGameById(id), ctx);
     }
-    
+
 }
