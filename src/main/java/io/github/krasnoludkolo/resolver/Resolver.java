@@ -87,7 +87,7 @@ public final class Resolver {
 
     public static class ResolverBuilder<E> {
 
-        final List<LogicalGroup<E>> logicalGroups;
+        private final List<LogicalGroup<E>> logicalGroups;
 
         private ResolverBuilder(LogicalGroup<E> logicalGroup) {
             this.logicalGroups = List.of(logicalGroup);
