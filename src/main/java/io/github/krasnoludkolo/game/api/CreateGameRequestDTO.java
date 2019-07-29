@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public final class CreateGameRequestDTO {
 
     private int maxNumber;
-    private int userId;
 
 }

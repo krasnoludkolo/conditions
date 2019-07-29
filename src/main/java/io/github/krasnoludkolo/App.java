@@ -21,7 +21,11 @@ final class App {
         GameConfiguration gameConfiguration = GameConfiguration.inMemoryWithRandom(pointConfiguration.pointFacade, userConfiguration.userCheckers);
         AuthConfiguration authConfiguration = AuthConfiguration.inMemory(userConfiguration.userFacade);
 
-        Javalin app = Javalin.create().start(7000);
+        Javalin app = Javalin
+                .create()
+                .start(7000)
+                .accessManager(authConfiguration.tokenAccessManager);
+        ;
 
         List<Controller> controllers = List.of(
                 gameConfiguration.gameRestController,

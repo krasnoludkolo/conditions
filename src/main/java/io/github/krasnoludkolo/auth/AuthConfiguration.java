@@ -9,6 +9,7 @@ public final class AuthConfiguration {
     public final AuthFacade authFacade;
     public final AuthenticationCheckers authenticationCheckers;
     public final LoginRestController loginRestController;
+    public final TokenAccessManager tokenAccessManager;
 
     public static AuthConfiguration inMemory(UserFacade userFacade){
         Repository<AuthUser> repository = new InMemoryRepository<>();
@@ -23,5 +24,6 @@ public final class AuthConfiguration {
         this.authenticationCheckers = new AuthenticationCheckers(repository, passwordEncrypt, tokenGenerator);
         this.authFacade = new AuthFacade(authenticationCheckers, registration);
         this.loginRestController = new LoginRestController(authFacade);
+        this.tokenAccessManager = new TokenAccessManager(authFacade);
     }
 }
