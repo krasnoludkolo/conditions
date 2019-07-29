@@ -25,7 +25,6 @@ final class App {
                 .create()
                 .start(7000)
                 .accessManager(authConfiguration.tokenAccessManager);
-        ;
 
         List<Controller> controllers = List.of(
                 gameConfiguration.gameRestController,
