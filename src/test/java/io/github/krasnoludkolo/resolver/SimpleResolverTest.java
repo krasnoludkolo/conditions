@@ -62,6 +62,21 @@ public class SimpleResolverTest {
         assertTrue(result.isLeft());
     }
 
+    @Test
+    public void  shouldReturnErrorWithAllOrFalseConditions(){
+        Either<Error, Integer> result = Resolver
+                .when(
+                        FALSE,
+                        TRUE
+                ).or(
+                    FALSE
+                ).perform(RETURN_ONE);
+
+        assertTrue(result.isLeft());
+    }
+
+
+
 
     private static class Error{}
 }
