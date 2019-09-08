@@ -1,5 +1,6 @@
 package io.github.krasnoludkolo.game;
 
+import io.github.krasnoludkolo.infrastructure.ESRepository;
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.points.PointFacade;
@@ -13,13 +14,19 @@ public final class GameConfiguration {
     public final GameCheckers gameCheckers;
     public final GameRestController gameRestController;
 
-    public static GameConfiguration inMemoryWithRandom(PointFacade pointFacade, UserCheckers userCheckers){
+    public static GameConfiguration inMemory(PointFacade pointFacade, UserCheckers userCheckers) {
         Repository<Game> repository = new InMemoryRepository<>();
         Random random = new Random();
         return new GameConfiguration(pointFacade, userCheckers, repository, random);
     }
 
-    public static GameConfiguration inMemoryWithRandom(PointFacade pointFacade, UserCheckers userCheckers, Random random){
+    public static GameConfiguration withEs(PointFacade pointFacade, UserCheckers userCheckers) {
+        Repository<Game> repository = new ESRepository<>(Game.class);
+        Random random = new Random();
+        return new GameConfiguration(pointFacade, userCheckers, repository, random);
+    }
+
+    public static GameConfiguration inMemory(PointFacade pointFacade, UserCheckers userCheckers, Random random) {
         Repository<Game> repository = new InMemoryRepository<>();
         return new GameConfiguration(pointFacade, userCheckers, repository, random);
     }

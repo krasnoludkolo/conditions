@@ -13,18 +13,18 @@ import io.vavr.jackson.datatype.VavrModule;
 
 final class App {
 
-    private String API_PREFIX = "/api";
+    private static final String API_PREFIX = "/api";
 
     void start() {
-        PointConfiguration pointConfiguration = PointConfiguration.inMemory();
-        UserConfiguration userConfiguration = UserConfiguration.inMemory(pointConfiguration.pointFacade);
-        GameConfiguration gameConfiguration = GameConfiguration.inMemoryWithRandom(pointConfiguration.pointFacade, userConfiguration.userCheckers);
-        AuthConfiguration authConfiguration = AuthConfiguration.inMemory(userConfiguration.userFacade);
+        PointConfiguration pointConfiguration = PointConfiguration.withEs();
+        UserConfiguration userConfiguration = UserConfiguration.withEs(pointConfiguration.pointFacade);
+        GameConfiguration gameConfiguration = GameConfiguration.withEs(pointConfiguration.pointFacade, userConfiguration.userCheckers);
+        AuthConfiguration authConfiguration = AuthConfiguration.withEs(userConfiguration.userFacade);
 
         Javalin app = Javalin
                 .create()
-                .start(7000)
-                .accessManager(authConfiguration.tokenAccessManager);
+                .accessManager(authConfiguration.tokenAccessManager)
+                .start(7000);
 
         List<Controller> controllers = List.of(
                 gameConfiguration.gameRestController,
@@ -37,8 +37,6 @@ final class App {
         addHandlers(app, handlers);
 
         JavalinJackson.getObjectMapper().registerModule(new VavrModule());
-
-
     }
 
 

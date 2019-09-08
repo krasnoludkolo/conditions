@@ -10,10 +10,11 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-class Game implements Identifiable<Integer> {
+class Game implements Identifiable<Integer>, Serializable {
 
     private final int id;
     private final int maxNumber;

@@ -1,5 +1,6 @@
 package io.github.krasnoludkolo.points;
 
+import io.github.krasnoludkolo.infrastructure.ESRepository;
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.infrastructure.Repository;
 
@@ -10,6 +11,11 @@ public final class PointConfiguration {
 
     public static PointConfiguration inMemory(){
         Repository<Point> repository = new InMemoryRepository<>();
+        return new PointConfiguration(repository);
+    }
+
+    public static PointConfiguration withEs() {
+        Repository<Point> repository = new ESRepository<>(Point.class);
         return new PointConfiguration(repository);
     }
 

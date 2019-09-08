@@ -31,7 +31,7 @@ public class GameFacadeTest {
         UserCheckers userCheckers = userConfiguration.userCheckers;
         userFacade = userConfiguration.userFacade;
         Random random = new Always4Random();
-        gameFacade = GameConfiguration.inMemoryWithRandom(pointFacade, userCheckers, random).gameFacade;
+        gameFacade = GameConfiguration.inMemory(pointFacade, userCheckers, random).gameFacade;
     }
 
 

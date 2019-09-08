@@ -1,5 +1,6 @@
 package io.github.krasnoludkolo.auth;
 
+import io.github.krasnoludkolo.infrastructure.ESRepository;
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.user.UserFacade;
@@ -16,8 +17,12 @@ public final class AuthConfiguration {
         return new AuthConfiguration(userFacade, repository);
     }
 
-    private AuthConfiguration(UserFacade userFacade, Repository<AuthUser> repository) {
+    public static AuthConfiguration withEs(UserFacade userFacade) {
+        Repository<AuthUser> repository = new ESRepository<>(AuthUser.class);
+        return new AuthConfiguration(userFacade, repository);
+    }
 
+    private AuthConfiguration(UserFacade userFacade, Repository<AuthUser> repository) {
         PasswordEncrypt passwordEncrypt = new PlainTextPasswordEncrypt();
         TokenGenerator tokenGenerator = new TokenGenerator();
         Registration registration = new Registration(repository, passwordEncrypt, userFacade);

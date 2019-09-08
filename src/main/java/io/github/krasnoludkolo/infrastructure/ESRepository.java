@@ -6,14 +6,14 @@ import io.vavr.control.Option;
 import pl.setblack.airomem.core.PersistenceController;
 import pl.setblack.airomem.core.builders.PrevaylerBuilder;
 
-final class ESRepository<T extends Identifiable<Integer>> implements Repository<T> {
+public final class ESRepository<T extends Identifiable<Integer>> implements Repository<T> {
 
-    private final PersistenceController<Repository<T>> controller;
+    private final transient PersistenceController<Repository<T>> controller;
 
-    ESRepository() {
+    public ESRepository(Class<T> type) {
         controller = PrevaylerBuilder
                 .<Repository<T>>newBuilder()
-                .withinUserFolder("testy/es")
+                .withinUserFolder("testy/es/" + type.getSimpleName() + "Repository")
                 .useSupplier(InMemoryRepository::new)
                 .build();
     }

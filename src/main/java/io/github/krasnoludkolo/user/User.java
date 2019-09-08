@@ -3,7 +3,9 @@ package io.github.krasnoludkolo.user;
 import io.github.krasnoludkolo.infrastructure.Identifiable;
 import io.github.krasnoludkolo.user.api.UserDTO;
 
-final class User implements Identifiable<Integer> {
+import java.io.Serializable;
+
+final class User implements Identifiable<Integer>, Serializable {
 
     private final int id;
     final boolean isAdmin;

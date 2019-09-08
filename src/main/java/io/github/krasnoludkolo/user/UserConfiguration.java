@@ -1,5 +1,6 @@
 package io.github.krasnoludkolo.user;
 
+import io.github.krasnoludkolo.infrastructure.ESRepository;
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.points.PointFacade;
@@ -12,6 +13,11 @@ public final class UserConfiguration {
 
     public static UserConfiguration inMemory(PointFacade pointFacade){
         Repository<User> repository = new InMemoryRepository<>();
+        return new UserConfiguration(repository, pointFacade);
+    }
+
+    public static UserConfiguration withEs(PointFacade pointFacade) {
+        Repository<User> repository = new ESRepository<>(User.class);
         return new UserConfiguration(repository, pointFacade);
     }
 

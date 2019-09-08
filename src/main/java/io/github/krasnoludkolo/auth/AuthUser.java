@@ -2,9 +2,10 @@ package io.github.krasnoludkolo.auth;
 
 import io.github.krasnoludkolo.infrastructure.Identifiable;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
-final class AuthUser implements Identifiable<Integer> {
+final class AuthUser implements Identifiable<Integer>, Serializable {
 
     private final int id;
     final String password;
