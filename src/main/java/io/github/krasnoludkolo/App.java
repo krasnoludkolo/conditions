@@ -4,8 +4,10 @@ import io.github.krasnoludkolo.auth.AuthConfiguration;
 import io.github.krasnoludkolo.game.GameConfiguration;
 import io.github.krasnoludkolo.infrastructure.http.Controller;
 import io.github.krasnoludkolo.infrastructure.http.JavalinHandler;
+import io.github.krasnoludkolo.infrastructure.http.ServerResponse;
 import io.github.krasnoludkolo.points.PointConfiguration;
 import io.github.krasnoludkolo.user.UserConfiguration;
+import io.javalin.Context;
 import io.javalin.Javalin;
 import io.javalin.json.JavalinJackson;
 import io.vavr.collection.List;
@@ -24,6 +26,7 @@ final class App {
         Javalin app = Javalin
                 .create()
                 .accessManager(authConfiguration.tokenAccessManager)
+                .error(404, this::notFoundErrorHandler)
                 .start(7000);
 
         List<Controller> controllers = List.of(
@@ -37,6 +40,10 @@ final class App {
         addHandlers(app, handlers);
 
         JavalinJackson.getObjectMapper().registerModule(new VavrModule());
+    }
+
+    private void notFoundErrorHandler(Context context) {
+        context.json(new ServerResponse("Not found"));
     }
 
 
