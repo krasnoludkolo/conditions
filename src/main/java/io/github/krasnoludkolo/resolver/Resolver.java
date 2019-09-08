@@ -112,10 +112,10 @@ public final class Resolver {
         }
 
         private Either<E, Success> checkConditions(List<LogicalGroup<E>> logicalGroup) {
-            return Either.sequence(
-                    logicalGroup
-                            .map(LogicalGroup::resolve)
-            ).mapLeft(Traversable::head)
+            List<Either<E, Success>> resolved = logicalGroup.map(LogicalGroup::resolve);
+            return Either
+                    .sequence(resolved)
+                    .mapLeft(Traversable::head)
                     .map(Success::new);
         }
 
