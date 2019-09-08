@@ -17,6 +17,8 @@ dependencies {
     compile "io.vavr:vavr-jackson:0.10.0"
     compile 'org.slf4j:slf4j-simple:1.7.26'
 
+    compile 'pl.setblack:airomem-core:1.1.0'
+
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.9'
 
     compileOnly 'org.projectlombok:lombok:1.18.8'

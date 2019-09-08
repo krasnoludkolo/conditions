@@ -4,7 +4,9 @@ import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 
-public interface Repository<T extends Identifiable<Integer>> {
+import java.io.Serializable;
+
+public interface Repository<T extends Identifiable<Integer>> extends Serializable {
     T save(T t);
 
     Option<T> findOne(int id);
