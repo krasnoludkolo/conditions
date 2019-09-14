@@ -1,5 +1,8 @@
-package io.github.krasnoludkolo.infrastructure;
+package io.github.krasnoludkolo.infrastructure.es;
 
+import io.github.krasnoludkolo.infrastructure.Identifiable;
+import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
+import io.github.krasnoludkolo.infrastructure.Repository;
 import io.github.krasnoludkolo.resolver.Success;
 import io.vavr.collection.List;
 import io.vavr.control.Option;

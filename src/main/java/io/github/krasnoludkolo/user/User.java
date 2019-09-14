@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 final class User implements Identifiable<Integer>, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private final int id;
     final boolean isAdmin;
 

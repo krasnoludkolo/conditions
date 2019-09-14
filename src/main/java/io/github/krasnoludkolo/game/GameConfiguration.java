@@ -1,8 +1,8 @@
 package io.github.krasnoludkolo.game;
 
-import io.github.krasnoludkolo.infrastructure.ESRepository;
 import io.github.krasnoludkolo.infrastructure.InMemoryRepository;
 import io.github.krasnoludkolo.infrastructure.Repository;
+import io.github.krasnoludkolo.infrastructure.es.ESRepository;
 import io.github.krasnoludkolo.points.PointFacade;
 import io.github.krasnoludkolo.user.UserCheckers;
 
