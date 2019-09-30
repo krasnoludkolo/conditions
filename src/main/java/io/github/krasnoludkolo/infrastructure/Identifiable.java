@@ -1,6 +1,8 @@
 package io.github.krasnoludkolo.infrastructure;
 
-public interface Identifiable<T> {
+import java.io.Serializable;
+
+public interface Identifiable<T> extends Serializable {
 
     T getId();
 

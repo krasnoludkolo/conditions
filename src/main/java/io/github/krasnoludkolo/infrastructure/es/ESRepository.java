@@ -23,26 +23,26 @@ public final class ESRepository<T extends Identifiable<Integer>> implements Repo
 
     @Override
     public T save(final T t) {
-        return controller.executeAndQuery(repository -> repository.save(t));
+        return controller.executeAndQuery(new SaveAction<>(t));
     }
 
     @Override
     public Option<T> findOne(int id) {
-        return controller.query(repository -> repository.findOne(id));
+        return controller.query(new FindOneAction<>(id));
     }
 
     @Override
     public List<T> findAll() {
-        return controller.query(Repository::findAll);
+        return controller.query(new FindAllAction<>());
     }
 
     @Override
     public Success delete(int id) {
-        return controller.executeAndQuery(repository -> repository.delete(id));
+        return controller.executeAndQuery(new DeleteAction<>(id));
     }
 
     @Override
     public Success update(final T t) { //TODO return type Success or T?
-        return controller.executeAndQuery(repository -> repository.update(t));
+        return controller.executeAndQuery(new UpdateAction<>(t));
     }
 }
